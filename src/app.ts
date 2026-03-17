@@ -41,7 +41,7 @@ app.get("/", (_req: Request, res: Response) => {
     description:
       "Built with StackKit - A production-ready Express template with TypeScript, security, and best practices.",
     version: "1.0.0",
-    docs: "https://github.com/tariqul420/stackkit",
+    docs: "https://vercel.com/templates",
   });
 });
 

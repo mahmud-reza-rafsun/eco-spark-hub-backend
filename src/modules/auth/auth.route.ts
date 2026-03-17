@@ -1,17 +1,16 @@
-import { Role } from "@prisma/client";
-
 import { Router } from "express";
 import { authorize } from "../../shared/middlewares/authorize.middleware";
 import { authController } from "./auth.controller";
+import { Role } from "../../generated/prisma";
 
 const router = Router()
 
 router.post("/register", authController.registerUser)
 router.post("/login", authController.loginUser)
-router.get("/me", authorize(Role.ADMIN, Role.USER), authController.getMe)
+router.get("/me", authorize(Role.ADMIN, Role.MEMBER), authController.getMe)
 router.post("/refresh-token", authController.getNewToken)
-router.post("/change-password", authorize(Role.ADMIN, Role.USER), authController.changePassword)
-router.post("/logout", authorize(Role.ADMIN, Role.USER), authController.logoutUser)
+router.post("/change-password", authorize(Role.ADMIN, Role.MEMBER), authController.changePassword)
+router.post("/logout", authorize(Role.ADMIN, Role.MEMBER), authController.logoutUser)
 router.post("/verify-email", authController.verifyEmail)
 router.post("/forget-password", authController.forgetPassword)
 router.post("/reset-password", authController.resetPassword)

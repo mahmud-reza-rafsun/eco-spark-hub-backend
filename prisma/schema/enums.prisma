@@ -1,0 +1,17 @@
+enum Role {
+    ADMIN
+    MEMBER
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCKED
+    DELETED
+}
+
+enum IdeaStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+}

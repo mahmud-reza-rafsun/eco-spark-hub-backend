@@ -1,0 +1,14 @@
+model Purchase {
+  id            String   @id @default(cuid())
+  amount        Float
+  transactionId String   @unique
+  createdAt     DateTime @default(now())
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  ideaId        String
+  idea          Idea     @relation(fields: [ideaId], references: [id])
+
+  @@unique([userId, ideaId])
+}
