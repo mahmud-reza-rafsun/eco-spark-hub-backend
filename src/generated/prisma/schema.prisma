@@ -73,6 +73,7 @@ model Verification {
 model Category {
   id    String @id @default(uuid())
   name  String @unique
+  slug  String @unique
   ideas Idea[]
 }
 
@@ -127,7 +128,7 @@ model Idea {
   isPaid Boolean @default(false)
   price  Float?  @default(0)
 
-  status        IdeaStatus @default(PENDING)
+  status        IdeaStatus @default(DRAFT)
   adminFeedback String?    @db.Text
 
   createdAt DateTime @default(now())

@@ -173,7 +173,8 @@ exports.Prisma.VerificationScalarFieldEnum = {
 
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  slug: 'slug'
 };
 
 exports.Prisma.CommentScalarFieldEnum = {

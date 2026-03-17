@@ -1,5 +1,5 @@
 {
-  "name": "EcoSpark-Hub",
+  "name": "eco_spark_hub",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -19,6 +19,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "type": "module",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "http-status": "^2.1.0",

@@ -10,8 +10,13 @@ enum UserStatus {
 }
 
 enum IdeaStatus {
-  DRAFT
-  PENDING
-  APPROVED
-  REJECTED
+    DRAFT
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+enum VoteType {
+    UPVOTE
+    DOWNVOTE
 }

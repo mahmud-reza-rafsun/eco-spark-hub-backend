@@ -1,10 +1,10 @@
 import { betterAuth } from "better-auth";
 import { bearer, emailOTP } from "better-auth/plugins";
-import { Role, UserStatus } from "@prisma/client";
 import { envVars } from "../config/env";
 import { sendEmail } from "../shared/utils/email";
 import { prisma } from "./prisma";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { Role, UserStatus } from "../generated/prisma";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -31,7 +31,7 @@ export const auth = betterAuth({
       prompt: "select_account consent",
       mapProfileToUser: () => {
         return {
-          role: Role.USER,
+          role: Role.MEMBER,
           status: UserStatus.ACTIVE,
           needPasswordChange: false,
           emailVerified: true,
@@ -51,7 +51,7 @@ export const auth = betterAuth({
       role: {
         type: "string",
         required: true,
-        defaultValue: Role.USER,
+        defaultValue: Role.MEMBER,
       },
       status: {
         type: "string",

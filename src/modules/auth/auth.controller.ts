@@ -10,27 +10,28 @@ import { tokenUtils } from "../../shared/utils/token";
 import { authService } from "./auth.service";
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body;
+    const payload = req.body;
+    console.log(payload)
 
-  const result = await authService.registerUser(payload);
+    const result = await authService.registerUser(payload);
 
-  const { accessToken, refreshToken, token, ...rest } = result;
+    const { accessToken, refreshToken, token, ...rest } = result;
 
-  tokenUtils.setAccessTokenCookie(res, accessToken);
-  tokenUtils.setRefreshTokenCookie(res, refreshToken);
-  tokenUtils.setBetterAuthSessionCookie(res, token as string);
+    tokenUtils.setAccessTokenCookie(res, accessToken);
+    tokenUtils.setRefreshTokenCookie(res, refreshToken);
+    tokenUtils.setBetterAuthSessionCookie(res, token as string);
 
-  sendResponse(res, {
-    status: status.CREATED,
-    success: true,
-    message: "User registered successfully",
-    data: {
-      token,
-      accessToken,
-      refreshToken,
-      ...rest,
-    },
-  });
+    sendResponse(res, {
+        status: status.CREATED,
+        success: true,
+        message: "User registered successfully",
+        data: {
+            token,
+            accessToken,
+            refreshToken,
+            ...rest,
+        },
+    });
 });
 
 const loginUser = catchAsync(
@@ -40,10 +41,10 @@ const loginUser = catchAsync(
         const { accessToken, refreshToken, token, ...rest } = result
 
         if (!token) {
-          throw new AppError(
-            status.INTERNAL_SERVER_ERROR,
-            "Session token is missing",
-          );
+            throw new AppError(
+                status.INTERNAL_SERVER_ERROR,
+                "Session token is missing",
+            );
         }
 
         tokenUtils.setAccessTokenCookie(res, accessToken);
@@ -51,15 +52,15 @@ const loginUser = catchAsync(
         tokenUtils.setBetterAuthSessionCookie(res, token);
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "User logged in successfully",
-          data: {
-            token,
-            accessToken,
-            refreshToken,
-            ...rest,
-          },
+            status: status.OK,
+            success: true,
+            message: "User logged in successfully",
+            data: {
+                token,
+                accessToken,
+                refreshToken,
+                ...rest,
+            },
         });
     }
 )
@@ -69,10 +70,10 @@ const getMe = catchAsync(
         const user = req.user;
         const result = await authService.getMe(user);
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "User profile fetched successfully",
-          data: result,
+            status: status.OK,
+            success: true,
+            message: "User profile fetched successfully",
+            data: result,
         });
     }
 )
@@ -93,14 +94,14 @@ const getNewToken = catchAsync(
         tokenUtils.setBetterAuthSessionCookie(res, sessionToken);
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "New tokens generated successfully",
-          data: {
-            accessToken,
-            refreshToken: newRefreshToken,
-            sessionToken,
-          },
+            status: status.OK,
+            success: true,
+            message: "New tokens generated successfully",
+            data: {
+                accessToken,
+                refreshToken: newRefreshToken,
+                sessionToken,
+            },
         });
     }
 )
@@ -119,10 +120,10 @@ const changePassword = catchAsync(
         tokenUtils.setBetterAuthSessionCookie(res, token as string);
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "Password changed successfully",
-          data: result,
+            status: status.OK,
+            success: true,
+            message: "Password changed successfully",
+            data: result,
         });
     }
 )
@@ -148,10 +149,10 @@ const logoutUser = catchAsync(
         });
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "User logged out successfully",
-          data: result,
+            status: status.OK,
+            success: true,
+            message: "User logged out successfully",
+            data: result,
         });
     }
 )
@@ -162,9 +163,9 @@ const verifyEmail = catchAsync(
         await authService.verifyEmail(email, otp);
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "Email verified successfully",
+            status: status.OK,
+            success: true,
+            message: "Email verified successfully",
         });
     }
 )
@@ -175,9 +176,9 @@ const forgetPassword = catchAsync(
         await authService.forgetPassword(email);
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "Password reset OTP sent to email successfully",
+            status: status.OK,
+            success: true,
+            message: "Password reset OTP sent to email successfully",
         });
     }
 )
@@ -188,9 +189,9 @@ const resetPassword = catchAsync(
         await authService.resetPassword(email, otp, newPassword);
 
         sendResponse(res, {
-          status: status.OK,
-          success: true,
-          message: "Password reset successfully",
+            status: status.OK,
+            success: true,
+            message: "Password reset successfully",
         });
     }
 )
@@ -203,8 +204,8 @@ const googleLogin = catchAsync((req: Request, res: Response) => {
     const callbackURL = `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
 
     res.render("googleRedirect", {
-        callbackURL : callbackURL,
-        betterAuthUrl : envVars.BETTER_AUTH_URL,
+        callbackURL: callbackURL,
+        betterAuthUrl: envVars.BETTER_AUTH_URL,
     })
 })
 
@@ -213,13 +214,13 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
 
     const sessionToken = req.cookies["better-auth.session_token"];
 
-    if(!sessionToken){
+    if (!sessionToken) {
         return res.redirect(`${envVars.FRONTEND_URL}/login?error=oauth_failed`);
     }
 
     const session = await auth.api.getSession({
-        headers:{
-            "Cookie" : `better-auth.session_token=${sessionToken}`
+        headers: {
+            "Cookie": `better-auth.session_token=${sessionToken}`
         }
     })
 
@@ -227,13 +228,13 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
         return res.redirect(`${envVars.FRONTEND_URL}/login?error=no_session_found`);
     }
 
-    if(session && !session.user){
+    if (session && !session.user) {
         return res.redirect(`${envVars.FRONTEND_URL}/login?error=no_user_found`);
     }
 
     const result = await authService.googleLoginSuccess(session);
 
-    const {accessToken, refreshToken} = result;
+    const { accessToken, refreshToken } = result;
 
     tokenUtils.setAccessTokenCookie(res, accessToken);
     tokenUtils.setRefreshTokenCookie(res, refreshToken);

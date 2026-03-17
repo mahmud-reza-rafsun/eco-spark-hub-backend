@@ -3,9 +3,9 @@ model Vote {
   type   VoteType
   userId String
   ideaId String
-  
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  idea   Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea Idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
 
   @@unique([userId, ideaId]) // One user can vote only once per idea
 }

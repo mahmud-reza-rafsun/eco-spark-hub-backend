@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { authorize } from "../../shared/middlewares/authorize.middleware";
 import { authController } from "./auth.controller";
 import { Role } from "../../generated/prisma";
+import { checkAuth } from "../../middlewares/checkAuth";
 
 const router = Router()
 
 router.post("/register", authController.registerUser)
 router.post("/login", authController.loginUser)
-router.get("/me", authorize(Role.ADMIN, Role.MEMBER), authController.getMe)
+router.get("/me", checkAuth(Role.ADMIN, Role.MEMBER), authController.getMe)
 router.post("/refresh-token", authController.getNewToken)
-router.post("/change-password", authorize(Role.ADMIN, Role.MEMBER), authController.changePassword)
-router.post("/logout", authorize(Role.ADMIN, Role.MEMBER), authController.logoutUser)
+router.post("/change-password", checkAuth(Role.ADMIN, Role.MEMBER), authController.changePassword)
+router.post("/logout", checkAuth(Role.ADMIN, Role.MEMBER), authController.logoutUser)
 router.post("/verify-email", authController.verifyEmail)
 router.post("/forget-password", authController.forgetPassword)
 router.post("/reset-password", authController.resetPassword)

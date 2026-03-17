@@ -1,9 +1,9 @@
 import { Role } from "@prisma/client";
 
 export interface IRequestUser {
-  id: string;
-  role: Role | string;
-  email: string;
+    id: string;
+    role: Role | string;
+    email: string;
 }
 
 export interface ILoginUserPayload {
@@ -21,3 +21,4 @@ export interface IChangePasswordPayload {
     currentPassword: string;
     newPassword: string;
 }
+
