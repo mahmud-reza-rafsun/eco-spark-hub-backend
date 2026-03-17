@@ -17,8 +17,22 @@ const createIdea = catchAsync(
         })
     }
 );
+const getAllIdea = catchAsync(
+    async (req: Request, res: Response) => {
+        const params = req.query
+        const result = await IdeaService.getAllIdea(params);
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Retrive all idea Successfully!!",
+            data: result,
+        })
+    }
+);
+
 
 
 export const IdeaController = {
-    createIdea
+    createIdea,
+    getAllIdea
 }

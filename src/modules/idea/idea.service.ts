@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import status from "http-status";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
@@ -14,7 +15,17 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     });
 
     if (!isUserExist) {
-        throw new AppError(status.UNAUTHORIZED, "User not found!!!")
+        throw new AppError(status.UNAUTHORIZED, "User not found!!!");
+    }
+
+    const isCategoryExist = await prisma.category.findUnique({
+        where: {
+            id: categoryId
+        }
+    });
+
+    if (!isCategoryExist) {
+        throw new AppError(status.NOT_FOUND, "Category not found!!!");
     }
 
     const result = await prisma.idea.create({
@@ -23,13 +34,71 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
             problem,
             solution,
             description,
-            price,
+            price: Number(price),
             images: Array.isArray(images) ? images : [images],
             authorId: isUserExist.id,
-            categoryId: categoryId
+            categoryId: isCategoryExist.id
         },
         include: {
-            author: true
+            author: {
+                select: {
+                    name: true,
+                    email: true
+                }
+            },
+            category: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
+
+    return result;
+};
+
+const getAllIdea = async (params: { searchTerm?: string; categoryId?: string }) => {
+    const { searchTerm, categoryId } = params;
+    const whereConditions: any = {
+        ...(categoryId && { categoryId }),
+
+        ...(searchTerm && {
+            OR: [
+                {
+                    title: {
+                        contains: searchTerm,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    category: {
+                        name: {
+                            contains: searchTerm,
+                            mode: 'insensitive',
+                        },
+                    },
+                },
+            ],
+        }),
+    };
+
+    const result = await prisma.idea.findMany({
+        where: whereConditions,
+        include: {
+            author: {
+                select: {
+                    name: true,
+                    email: true
+                }
+            },
+            category: {
+                select: {
+                    name: true
+                }
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
         }
     });
     return result;
@@ -37,46 +106,5 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
 
 export const IdeaService = {
     createIdea,
-}
-
-
-
-
-// const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
-//     const {
-//         title,
-//         problemStatement,
-//         proposedSolution,
-//         description,
-//         price,
-//         images,
-//         categoryId // পেলোড থেকে এটি নিতে হবে
-//     } = payload;
-
-//     // ইউজার চেক
-//     const isUserExist = await prisma.user.findUnique({
-//         where: { id, isDeleted: false }
-//     });
-//     if (!isUserExist) throw new AppError(status.UNAUTHORIZED, "User not found!!!");
-
-//     // ক্যাটাগরি চেক (নিশ্চিত হওয়া যে অ্যাডমিন এই ক্যাটাগরি ক্রিয়েট করেছে)
-//     const isCategoryExist = await prisma.category.findUnique({
-//         where: { id: categoryId }
-//     });
-//     if (!isCategoryExist) throw new AppError(status.NOT_FOUND, "Category not found!!!");
-
-//     const result = await prisma.idea.create({
-//         data: {
-//             title,
-//             problem: problemStatement,
-//             solution: proposedSolution,
-//             description,
-//             price,
-//             images: Array.isArray(images) ? images : [images],
-//             authorId: isUserExist.id,
-//             categoryId: isCategoryExist.id // এখানে ক্যাটাগরি আইডি বসবে
-//         }
-//     });
-
-//     return result;
-// }
+    getAllIdea
+};
