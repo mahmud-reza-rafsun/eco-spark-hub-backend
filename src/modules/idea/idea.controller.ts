@@ -30,8 +30,6 @@ const getAllIdea = catchAsync(
     }
 );
 
-
-
 export const IdeaController = {
     createIdea,
     getAllIdea
