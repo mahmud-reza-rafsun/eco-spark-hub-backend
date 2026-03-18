@@ -3,6 +3,7 @@ import { catchAsync } from "../../shared/utils/catch-async";
 import { IdeaService } from "./idea.service";
 import { sendResponse } from "../../shared/utils/send-response";
 import status from "http-status";
+import { AppError } from "../../shared/errors/app-error";
 
 const createIdea = catchAsync(
     async (req: Request, res: Response) => {
@@ -19,18 +20,51 @@ const createIdea = catchAsync(
 );
 const getAllIdea = catchAsync(
     async (req: Request, res: Response) => {
-        const params = req.query
+        const params = req.query;
         const result = await IdeaService.getAllIdea(params);
+
         sendResponse(res, {
             status: status.OK,
             success: true,
-            message: "Retrive all idea Successfully!!",
-            data: result,
-        })
+            message: "Retrieved all ideas successfully!!",
+            meta: result.meta,
+            data: result.data,
+        });
     }
 );
 
+const getIdeaById = catchAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        console.log(id);
+        const result = await IdeaService.getIdeaById(id as string);
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Retrive ideas by id successfully",
+            data: result
+        })
+    }
+)
+
+const updateIdea = catchAsync(
+    async (req: Request, res: Response) => {
+        const user = req.user
+        const { id } = req.params;
+        const payload = req.body;
+        const result = await IdeaService.updateIdea(user, id as string, payload);
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Updae ideas by id successfully",
+            data: result
+        })
+    }
+)
+
 export const IdeaController = {
     createIdea,
-    getAllIdea
+    getAllIdea,
+    getIdeaById,
+    updateIdea
 }

@@ -8640,6 +8640,7 @@ export namespace Prisma {
     problem: string | null
     solution: string | null
     description: string | null
+    images: string | null
     isPaid: boolean | null
     price: number | null
     status: $Enums.IdeaStatus | null
@@ -8656,6 +8657,7 @@ export namespace Prisma {
     problem: string | null
     solution: string | null
     description: string | null
+    images: string | null
     isPaid: boolean | null
     price: number | null
     status: $Enums.IdeaStatus | null
@@ -8699,6 +8701,7 @@ export namespace Prisma {
     problem?: true
     solution?: true
     description?: true
+    images?: true
     isPaid?: true
     price?: true
     status?: true
@@ -8715,6 +8718,7 @@ export namespace Prisma {
     problem?: true
     solution?: true
     description?: true
+    images?: true
     isPaid?: true
     price?: true
     status?: true
@@ -8835,7 +8839,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images: string[]
+    images: string
     isPaid: boolean
     price: number | null
     status: $Enums.IdeaStatus
@@ -8976,7 +8980,7 @@ export namespace Prisma {
       problem: string
       solution: string
       description: string
-      images: string[]
+      images: string
       isPaid: boolean
       price: number | null
       status: $Enums.IdeaStatus
@@ -9418,7 +9422,7 @@ export namespace Prisma {
     readonly problem: FieldRef<"Idea", 'String'>
     readonly solution: FieldRef<"Idea", 'String'>
     readonly description: FieldRef<"Idea", 'String'>
-    readonly images: FieldRef<"Idea", 'String[]'>
+    readonly images: FieldRef<"Idea", 'String'>
     readonly isPaid: FieldRef<"Idea", 'Boolean'>
     readonly price: FieldRef<"Idea", 'Float'>
     readonly status: FieldRef<"Idea", 'IdeaStatus'>
@@ -12835,7 +12839,7 @@ export namespace Prisma {
     problem?: StringFilter<"Idea"> | string
     solution?: StringFilter<"Idea"> | string
     description?: StringFilter<"Idea"> | string
-    images?: StringNullableListFilter<"Idea">
+    images?: StringFilter<"Idea"> | string
     isPaid?: BoolFilter<"Idea"> | boolean
     price?: FloatNullableFilter<"Idea"> | number | null
     status?: EnumIdeaStatusFilter<"Idea"> | $Enums.IdeaStatus
@@ -12882,7 +12886,7 @@ export namespace Prisma {
     problem?: StringFilter<"Idea"> | string
     solution?: StringFilter<"Idea"> | string
     description?: StringFilter<"Idea"> | string
-    images?: StringNullableListFilter<"Idea">
+    images?: StringFilter<"Idea"> | string
     isPaid?: BoolFilter<"Idea"> | boolean
     price?: FloatNullableFilter<"Idea"> | number | null
     status?: EnumIdeaStatusFilter<"Idea"> | $Enums.IdeaStatus
@@ -12929,7 +12933,7 @@ export namespace Prisma {
     problem?: StringWithAggregatesFilter<"Idea"> | string
     solution?: StringWithAggregatesFilter<"Idea"> | string
     description?: StringWithAggregatesFilter<"Idea"> | string
-    images?: StringNullableListFilter<"Idea">
+    images?: StringWithAggregatesFilter<"Idea"> | string
     isPaid?: BoolWithAggregatesFilter<"Idea"> | boolean
     price?: FloatNullableWithAggregatesFilter<"Idea"> | number | null
     status?: EnumIdeaStatusWithAggregatesFilter<"Idea"> | $Enums.IdeaStatus
@@ -13555,7 +13559,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -13575,7 +13579,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -13595,7 +13599,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -13615,7 +13619,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -13635,7 +13639,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -13652,7 +13656,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -13667,7 +13671,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -14227,14 +14231,6 @@ export namespace Prisma {
     parentId?: SortOrder
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -14285,6 +14281,7 @@ export namespace Prisma {
     problem?: SortOrder
     solution?: SortOrder
     description?: SortOrder
+    images?: SortOrder
     isPaid?: SortOrder
     price?: SortOrder
     status?: SortOrder
@@ -14301,6 +14298,7 @@ export namespace Prisma {
     problem?: SortOrder
     solution?: SortOrder
     description?: SortOrder
+    images?: SortOrder
     isPaid?: SortOrder
     price?: SortOrder
     status?: SortOrder
@@ -14887,10 +14885,6 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
-  export type IdeaCreateimagesInput = {
-    set: string[]
-  }
-
   export type UserCreateNestedOneWithoutIdeasInput = {
     create?: XOR<UserCreateWithoutIdeasInput, UserUncheckedCreateWithoutIdeasInput>
     connectOrCreate?: UserCreateOrConnectWithoutIdeasInput
@@ -14943,11 +14937,6 @@ export namespace Prisma {
     connectOrCreate?: PurchaseCreateOrConnectWithoutIdeaInput | PurchaseCreateOrConnectWithoutIdeaInput[]
     createMany?: PurchaseCreateManyIdeaInputEnvelope
     connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-  }
-
-  export type IdeaUpdateimagesInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -15503,7 +15492,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -15522,7 +15511,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -15711,7 +15700,7 @@ export namespace Prisma {
     problem?: StringFilter<"Idea"> | string
     solution?: StringFilter<"Idea"> | string
     description?: StringFilter<"Idea"> | string
-    images?: StringNullableListFilter<"Idea">
+    images?: StringFilter<"Idea"> | string
     isPaid?: BoolFilter<"Idea"> | boolean
     price?: FloatNullableFilter<"Idea"> | number | null
     status?: EnumIdeaStatusFilter<"Idea"> | $Enums.IdeaStatus
@@ -15974,7 +15963,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -15993,7 +15982,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16083,7 +16072,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16102,7 +16091,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16239,7 +16228,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -16258,7 +16247,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -16627,7 +16616,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16646,7 +16635,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16732,7 +16721,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -16751,7 +16740,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -16815,7 +16804,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16834,7 +16823,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -16920,7 +16909,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -16939,7 +16928,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -16991,7 +16980,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -17122,7 +17111,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -17141,7 +17130,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -17160,7 +17149,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -17218,7 +17207,7 @@ export namespace Prisma {
     problem: string
     solution: string
     description: string
-    images?: IdeaCreateimagesInput | string[]
+    images: string
     isPaid?: boolean
     price?: number | null
     status?: $Enums.IdeaStatus
@@ -17234,7 +17223,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -17253,7 +17242,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
@@ -17272,7 +17261,7 @@ export namespace Prisma {
     problem?: StringFieldUpdateOperationsInput | string
     solution?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    images?: IdeaUpdateimagesInput | string[]
+    images?: StringFieldUpdateOperationsInput | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus

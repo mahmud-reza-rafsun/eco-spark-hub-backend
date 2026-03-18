@@ -118,12 +118,12 @@ enum VoteType {
 }
 
 model Idea {
-  id          String   @id @default(cuid())
+  id          String @id @default(cuid())
   title       String
-  problem     String   @db.Text
-  solution    String   @db.Text
-  description String   @db.Text
-  images      String[]
+  problem     String @db.Text
+  solution    String @db.Text
+  description String @db.Text
+  images      String
 
   isPaid Boolean @default(false)
   price  Float?  @default(0)
