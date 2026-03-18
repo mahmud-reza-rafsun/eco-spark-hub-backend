@@ -129,7 +129,7 @@ model Idea {
   isPaid Boolean @default(false)
   price  Float?  @default(0)
 
-  status        IdeaStatus @default(DRAFT)
+  status        IdeaStatus @default(PENDING)
   adminFeedback String?    @db.Text
 
   createdAt DateTime @default(now())

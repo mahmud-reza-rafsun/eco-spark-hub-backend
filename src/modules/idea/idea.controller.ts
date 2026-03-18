@@ -62,9 +62,35 @@ const updateIdea = catchAsync(
     }
 )
 
+const approveAndRejectIdea = catchAsync(
+    async (req: Request, res: Response) => {
+        const { status: newStatus, feedback } = req.body;
+        const user = req.user;
+        const { id } = req.params;
+
+        // Validation: Ensure feedback exists if status is REJECTED
+        if (newStatus === 'REJECTED' && !feedback) {
+            throw new AppError(status.BAD_REQUEST, "Feedback is required when rejecting an idea.");
+        }
+
+        const result = await IdeaService.approveOrRejectIdea(user, id as string, {
+            status: newStatus as string,
+            feedback: feedback as string
+        });
+
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: `Idea ${newStatus.toLowerCase()} successfully`,
+            data: result
+        });
+    }
+);
+
 export const IdeaController = {
     createIdea,
     getAllIdea,
     getIdeaById,
-    updateIdea
+    updateIdea,
+    approveAndRejectIdea
 }

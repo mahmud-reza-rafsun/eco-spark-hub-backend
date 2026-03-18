@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import status from "http-status";
+import status from 'http-status';
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
 import { ICreateIdeaPayload, IUpdateIdeaPayload } from "./idea.interface";
@@ -17,7 +17,7 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     });
 
     if (!isUserExist) {
-        throw new AppError(status.UNAUTHORIZED, "User not found!!!");
+        throw new AppError(status.NOT_FOUND, "User not found!!!");
     }
 
     const isCategoryExist = await prisma.category.findUnique({
@@ -172,55 +172,75 @@ const getIdeaById = async (id: string) => {
 }
 
 const updateIdea = async (user: IRequestUser, id: string, payload: IUpdateIdeaPayload) => {
-    const isUserExist = await prisma.user.findUnique({
-        where: {
-            id: user.id
-        }
-    });
-    if (!isUserExist) {
-        throw new AppError(status.NOT_FOUND, "User Not Found");
-    }
-    const allowedUser = [Role.ADMIN, Role.MEMBER];
-    if (!allowedUser.includes(isUserExist.role)) {
-        throw new AppError(status.UNAUTHORIZED, "Unauthorized Access!!!")
-    }
     const idea = await prisma.idea.findUnique({
         where: { id: id },
         select: {
-            status: true
+            status: true,
+            id: true
         }
     });
-
     if (!idea) {
         throw new AppError(status.NOT_FOUND, "Idea Not Found");
     }
+    const isOwner = idea.id === user.id;
+    const isAdmin = user.role === Role.ADMIN;
 
-    if (idea.status !== IdeaStatus.UNPUBLISHED) {
+    if (!isOwner && !isAdmin) {
+        throw new AppError(status.FORBIDDEN, "You are not allowed to update this idea.");
+    }
+
+    if (idea.status === IdeaStatus.PENDING || idea.status === IdeaStatus.APPROVED) {
         throw new AppError(
             status.BAD_REQUEST,
-            "Published or Approved ideas cannot be updated."
+            `Cannot update an idea that is already ${idea.status.toLowerCase()}.`
         );
     }
+
+    return await prisma.idea.update({
+        where: { id: id },
+        data: payload
+    });
+}
+
+const approveOrRejectIdea = async (user: IRequestUser, id: string, payload: { status: string; feedback?: string }) => {
+    const isUserAdmin = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { role: true }
+    });
+
+    if (isUserAdmin?.role !== Role.ADMIN) {
+        throw new AppError(status.UNAUTHORIZED, "Unauthorized Access!!!");
+    }
+
+    const updateData: any = {
+        status: payload.status,
+    };
+
+    if (payload.status === IdeaStatus.REJECTED && payload.feedback) {
+        updateData.adminFeedback = payload.feedback;
+    } else {
+        updateData.adminFeedback = null;
+    }
+
     const result = await prisma.idea.update({
-        where: {
-            id: id
-        },
-        data: {
-            title: payload.title,
-            problem: payload.problem,
-            solution: payload.solution,
-            description: payload.description,
-            price: payload.price,
-            images: payload.images
+        where: { id: id },
+        data: updateData,
+        select: {
+            title: true,
+            images: true,
+            description: true,
+            status: true,
+            adminFeedback: true
         }
     });
 
     return result;
-}
+};
 
 export const IdeaService = {
     createIdea,
     getAllIdea,
     getIdeaById,
-    updateIdea
+    updateIdea,
+    approveOrRejectIdea
 };
