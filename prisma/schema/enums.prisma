@@ -14,6 +14,7 @@ enum IdeaStatus {
     PENDING
     APPROVED
     REJECTED
+    UNPUBLISHED
 }
 
 enum VoteType {

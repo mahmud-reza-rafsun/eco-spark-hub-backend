@@ -180,10 +180,11 @@ exports.Prisma.CategoryScalarFieldEnum = {
 exports.Prisma.CommentScalarFieldEnum = {
   id: 'id',
   content: 'content',
-  createdAt: 'createdAt',
   userId: 'userId',
   ideaId: 'ideaId',
-  parentId: 'parentId'
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.IdeaScalarFieldEnum = {
@@ -248,7 +249,8 @@ exports.IdeaStatus = exports.$Enums.IdeaStatus = {
   DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  UNPUBLISHED: 'UNPUBLISHED'
 };
 
 exports.VoteType = exports.$Enums.VoteType = {

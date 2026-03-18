@@ -4,7 +4,7 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
 import { ICreateIdeaPayload, IUpdateIdeaPayload } from "./idea.interface";
 import { IRequestUser } from "../auth/auth.interface";
-import { Role } from "../../generated/prisma";
+import { IdeaStatus, Role } from "../../generated/prisma";
 
 const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     const { title, problem, solution, description, price, images, categoryId } = payload;
@@ -98,6 +98,21 @@ const getAllIdea = async (params: {
         skip,
         take: limitNum,
         include: {
+            votes: {
+                include: {
+                    user: {
+                        select: {
+                            name: true,
+                            email: true
+                        }
+                    }
+                }
+            },
+            _count: {
+                select: {
+                    votes: true
+                }
+            },
             author: {
                 select: {
                     name: true,
@@ -134,6 +149,23 @@ const getIdeaById = async (id: string) => {
     const result = await prisma.idea.findUnique({
         where: {
             id: id,
+        },
+        include: {
+            votes: {
+                include: {
+                    user: {
+                        select: {
+                            name: true,
+                            email: true
+                        }
+                    }
+                }
+            },
+            _count: {
+                select: {
+                    votes: true
+                }
+            },
         }
     });
     return result;
@@ -148,8 +180,26 @@ const updateIdea = async (user: IRequestUser, id: string, payload: IUpdateIdeaPa
     if (!isUserExist) {
         throw new AppError(status.NOT_FOUND, "User Not Found");
     }
-    if (isUserExist.role !== (Role.MEMBER && Role.ADMIN)) {
-        throw new AppError(status.UNAUTHORIZED, "UnAuthroized Access!!!")
+    const allowedUser = [Role.ADMIN, Role.MEMBER];
+    if (!allowedUser.includes(isUserExist.role)) {
+        throw new AppError(status.UNAUTHORIZED, "Unauthorized Access!!!")
+    }
+    const idea = await prisma.idea.findUnique({
+        where: { id: id },
+        select: {
+            status: true
+        }
+    });
+
+    if (!idea) {
+        throw new AppError(status.NOT_FOUND, "Idea Not Found");
+    }
+
+    if (idea.status !== IdeaStatus.UNPUBLISHED) {
+        throw new AppError(
+            status.BAD_REQUEST,
+            "Published or Approved ideas cannot be updated."
+        );
     }
     const result = await prisma.idea.update({
         where: {

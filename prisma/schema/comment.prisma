@@ -1,16 +1,16 @@
 model Comment {
-  id        String    @id @default(cuid())
-  content   String    @db.Text
-  createdAt DateTime  @default(now())
-  
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  ideaId    String
-  idea      Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  id       String  @id @default(uuid())
+  content  String
+  userId   String
+  ideaId   String
+  parentId String?
 
-  // Nested Comments Logic
-  parentId  String?
-  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies   Comment[] @relation("CommentReplies")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea Idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
