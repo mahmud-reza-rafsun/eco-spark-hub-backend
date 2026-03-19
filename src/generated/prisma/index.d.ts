@@ -81,11 +81,9 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
 export const IdeaStatus: {
-  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  UNPUBLISHED: 'UNPUBLISHED'
+  REJECTED: 'REJECTED'
 };
 
 export type IdeaStatus = (typeof IdeaStatus)[keyof typeof IdeaStatus]
@@ -97,6 +95,14 @@ export const VoteType: {
 };
 
 export type VoteType = (typeof VoteType)[keyof typeof VoteType]
+
+
+export const ArchiveStatus: {
+  TRUE: 'TRUE',
+  FALSE: 'FALSE'
+};
+
+export type ArchiveStatus = (typeof ArchiveStatus)[keyof typeof ArchiveStatus]
 
 }
 
@@ -115,6 +121,10 @@ export const IdeaStatus: typeof $Enums.IdeaStatus
 export type VoteType = $Enums.VoteType
 
 export const VoteType: typeof $Enums.VoteType
+
+export type ArchiveStatus = $Enums.ArchiveStatus
+
+export const ArchiveStatus: typeof $Enums.ArchiveStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -8659,6 +8669,7 @@ export namespace Prisma {
     price: number | null
     status: $Enums.IdeaStatus | null
     adminFeedback: string | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     authorId: string | null
@@ -8676,6 +8687,7 @@ export namespace Prisma {
     price: number | null
     status: $Enums.IdeaStatus | null
     adminFeedback: string | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     authorId: string | null
@@ -8693,6 +8705,7 @@ export namespace Prisma {
     price: number
     status: number
     adminFeedback: number
+    isDeleted: number
     createdAt: number
     updatedAt: number
     authorId: number
@@ -8720,6 +8733,7 @@ export namespace Prisma {
     price?: true
     status?: true
     adminFeedback?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -8737,6 +8751,7 @@ export namespace Prisma {
     price?: true
     status?: true
     adminFeedback?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -8754,6 +8769,7 @@ export namespace Prisma {
     price?: true
     status?: true
     adminFeedback?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -8858,6 +8874,7 @@ export namespace Prisma {
     price: number | null
     status: $Enums.IdeaStatus
     adminFeedback: string | null
+    isDeleted: boolean
     createdAt: Date
     updatedAt: Date
     authorId: string
@@ -8894,6 +8911,7 @@ export namespace Prisma {
     price?: boolean
     status?: boolean
     adminFeedback?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -8917,6 +8935,7 @@ export namespace Prisma {
     price?: boolean
     status?: boolean
     adminFeedback?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -8936,6 +8955,7 @@ export namespace Prisma {
     price?: boolean
     status?: boolean
     adminFeedback?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -8955,13 +8975,14 @@ export namespace Prisma {
     price?: boolean
     status?: boolean
     adminFeedback?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
     categoryId?: boolean
   }
 
-  export type IdeaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "problem" | "solution" | "description" | "images" | "isPaid" | "price" | "status" | "adminFeedback" | "createdAt" | "updatedAt" | "authorId" | "categoryId", ExtArgs["result"]["idea"]>
+  export type IdeaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "problem" | "solution" | "description" | "images" | "isPaid" | "price" | "status" | "adminFeedback" | "isDeleted" | "createdAt" | "updatedAt" | "authorId" | "categoryId", ExtArgs["result"]["idea"]>
   export type IdeaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -8999,6 +9020,7 @@ export namespace Prisma {
       price: number | null
       status: $Enums.IdeaStatus
       adminFeedback: string | null
+      isDeleted: boolean
       createdAt: Date
       updatedAt: Date
       authorId: string
@@ -9441,6 +9463,7 @@ export namespace Prisma {
     readonly price: FieldRef<"Idea", 'Float'>
     readonly status: FieldRef<"Idea", 'IdeaStatus'>
     readonly adminFeedback: FieldRef<"Idea", 'String'>
+    readonly isDeleted: FieldRef<"Idea", 'Boolean'>
     readonly createdAt: FieldRef<"Idea", 'DateTime'>
     readonly updatedAt: FieldRef<"Idea", 'DateTime'>
     readonly authorId: FieldRef<"Idea", 'String'>
@@ -12222,6 +12245,7 @@ export namespace Prisma {
     price: 'price',
     status: 'status',
     adminFeedback: 'adminFeedback',
+    isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     authorId: 'authorId',
@@ -12864,6 +12888,7 @@ export namespace Prisma {
     price?: FloatNullableFilter<"Idea"> | number | null
     status?: EnumIdeaStatusFilter<"Idea"> | $Enums.IdeaStatus
     adminFeedback?: StringNullableFilter<"Idea"> | string | null
+    isDeleted?: BoolFilter<"Idea"> | boolean
     createdAt?: DateTimeFilter<"Idea"> | Date | string
     updatedAt?: DateTimeFilter<"Idea"> | Date | string
     authorId?: StringFilter<"Idea"> | string
@@ -12886,6 +12911,7 @@ export namespace Prisma {
     price?: SortOrderInput | SortOrder
     status?: SortOrder
     adminFeedback?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -12911,6 +12937,7 @@ export namespace Prisma {
     price?: FloatNullableFilter<"Idea"> | number | null
     status?: EnumIdeaStatusFilter<"Idea"> | $Enums.IdeaStatus
     adminFeedback?: StringNullableFilter<"Idea"> | string | null
+    isDeleted?: BoolFilter<"Idea"> | boolean
     createdAt?: DateTimeFilter<"Idea"> | Date | string
     updatedAt?: DateTimeFilter<"Idea"> | Date | string
     authorId?: StringFilter<"Idea"> | string
@@ -12933,6 +12960,7 @@ export namespace Prisma {
     price?: SortOrderInput | SortOrder
     status?: SortOrder
     adminFeedback?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -12958,6 +12986,7 @@ export namespace Prisma {
     price?: FloatNullableWithAggregatesFilter<"Idea"> | number | null
     status?: EnumIdeaStatusWithAggregatesFilter<"Idea"> | $Enums.IdeaStatus
     adminFeedback?: StringNullableWithAggregatesFilter<"Idea"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"Idea"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Idea"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Idea"> | Date | string
     authorId?: StringWithAggregatesFilter<"Idea"> | string
@@ -13591,6 +13620,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutIdeasInput
@@ -13611,6 +13641,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -13631,6 +13662,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutIdeasNestedInput
@@ -13651,6 +13683,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -13671,6 +13704,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -13688,6 +13722,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13703,6 +13738,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -14295,6 +14331,7 @@ export namespace Prisma {
     price?: SortOrder
     status?: SortOrder
     adminFeedback?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -14316,6 +14353,7 @@ export namespace Prisma {
     price?: SortOrder
     status?: SortOrder
     adminFeedback?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -14333,6 +14371,7 @@ export namespace Prisma {
     price?: SortOrder
     status?: SortOrder
     adminFeedback?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -15529,6 +15568,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     category: CategoryCreateNestedOneWithoutIdeasInput
@@ -15548,6 +15588,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId: string
@@ -15738,6 +15779,7 @@ export namespace Prisma {
     price?: FloatNullableFilter<"Idea"> | number | null
     status?: EnumIdeaStatusFilter<"Idea"> | $Enums.IdeaStatus
     adminFeedback?: StringNullableFilter<"Idea"> | string | null
+    isDeleted?: BoolFilter<"Idea"> | boolean
     createdAt?: DateTimeFilter<"Idea"> | Date | string
     updatedAt?: DateTimeFilter<"Idea"> | Date | string
     authorId?: StringFilter<"Idea"> | string
@@ -16001,6 +16043,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutIdeasInput
@@ -16020,6 +16063,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -16110,6 +16154,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutIdeasInput
@@ -16129,6 +16174,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -16270,6 +16316,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutIdeasNestedInput
@@ -16289,6 +16336,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -16662,6 +16710,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutIdeasInput
@@ -16681,6 +16730,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -16767,6 +16817,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutIdeasNestedInput
@@ -16786,6 +16837,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -16850,6 +16902,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutIdeasInput
@@ -16869,6 +16922,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -16955,6 +17009,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutIdeasNestedInput
@@ -16974,6 +17029,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -17027,6 +17083,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId: string
@@ -17161,6 +17218,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutIdeasNestedInput
@@ -17180,6 +17238,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
@@ -17199,6 +17258,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
@@ -17257,6 +17317,7 @@ export namespace Prisma {
     price?: number | null
     status?: $Enums.IdeaStatus
     adminFeedback?: string | null
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -17273,6 +17334,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutIdeasNestedInput
@@ -17292,6 +17354,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -17311,6 +17374,7 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
     adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string

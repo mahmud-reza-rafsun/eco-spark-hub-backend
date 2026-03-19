@@ -106,16 +106,19 @@ enum UserStatus {
 }
 
 enum IdeaStatus {
-  DRAFT
   PENDING
   APPROVED
   REJECTED
-  UNPUBLISHED
 }
 
 enum VoteType {
   UPVOTE
   DOWNVOTE
+}
+
+enum ArchiveStatus {
+  TRUE
+  FALSE
 }
 
 model Idea {
@@ -131,6 +134,8 @@ model Idea {
 
   status        IdeaStatus @default(PENDING)
   adminFeedback String?    @db.Text
+
+  isDeleted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -87,10 +87,39 @@ const approveAndRejectIdea = catchAsync(
     }
 );
 
+const getMyIdeas = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+    const { id } = req.params
+    const result = await IdeaService.getMyIdea(id as string, user.id);
+
+    sendResponse(res, {
+        status: status.OK,
+        success: true,
+        message: "Your ideas retrieved successfully",
+        data: result,
+    });
+});
+
+const deleteIdea = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = req.user;
+
+    const result = await IdeaService.deleteIdea(id as string, user.id);
+
+    sendResponse(res, {
+        status: status.OK,
+        success: true,
+        message: "Idea deleted successfully",
+        data: result,
+    });
+});
+
 export const IdeaController = {
     createIdea,
     getAllIdea,
     getIdeaById,
     updateIdea,
-    approveAndRejectIdea
+    approveAndRejectIdea,
+    getMyIdeas,
+    deleteIdea
 }

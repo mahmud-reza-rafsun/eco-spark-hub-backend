@@ -4,7 +4,7 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
 import { ICreateIdeaPayload, IUpdateIdeaPayload } from "./idea.interface";
 import { IRequestUser } from "../auth/auth.interface";
-import { IdeaStatus, Role } from "../../generated/prisma";
+import { ArchiveStatus, IdeaStatus, Role, UserStatus } from "../../generated/prisma";
 
 const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     const { title, problem, solution, description, price, images, categoryId } = payload;
@@ -94,7 +94,10 @@ const getAllIdea = async (params: {
     };
 
     const result = await prisma.idea.findMany({
-        where: whereConditions,
+        where: {
+            ...whereConditions,
+            isDeleted: false
+        },
         skip,
         take: limitNum,
         include: {
@@ -178,9 +181,37 @@ const getIdeaById = async (id: string) => {
     const result = await prisma.idea.findUnique({
         where: {
             id: id,
+            isDeleted: false
         },
         include: {
-            comments: true,
+            comments: {
+                where: {
+                    parentId: null
+                },
+                include: {
+                    user: {
+                        select: {
+                            name: true,
+                            image: true,
+                            email: true
+                        }
+                    },
+                    replies: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                    email: true,
+                                    image: true,
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
             votes: {
                 include: {
                     user: {
@@ -203,7 +234,10 @@ const getIdeaById = async (id: string) => {
 
 const updateIdea = async (user: IRequestUser, id: string, payload: IUpdateIdeaPayload) => {
     const idea = await prisma.idea.findUnique({
-        where: { id: id },
+        where: {
+            id: id,
+            isDeleted: true
+        },
         select: {
             status: true,
             id: true
@@ -267,10 +301,103 @@ const approveOrRejectIdea = async (user: IRequestUser, id: string, payload: { st
     return result;
 };
 
+const getMyIdea = async (id: string, userId: string) => {
+    const user = await prisma.user.findUnique({
+        where: { id: userId, isDeleted: false }
+    });
+
+    if (!user) {
+        throw new AppError(status.NOT_FOUND, "User not found!");
+    }
+
+    if (user.status === UserStatus.BLOCKED) {
+        throw new AppError(status.FORBIDDEN, "Your account is blocked!");
+    }
+
+    const result = await prisma.idea.findMany({
+        where: {
+            authorId: userId,
+            isDeleted: false
+        },
+        orderBy: {
+            createdAt: 'desc'
+        },
+        include: {
+            comments: {
+                where: {
+                    parentId: null
+                },
+                include: {
+                    user: {
+                        select: {
+                            name: true,
+                            image: true,
+                            email: true
+                        }
+                    },
+                    replies: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                    email: true,
+                                    image: true,
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
+            category: true,
+            author: {
+                select: {
+                    name: true,
+                    email: true,
+                    role: true
+                }
+            }
+        }
+    });
+
+    return result;
+};
+
+const deleteIdea = async (id: string, userId: string) => {
+    const existingIdea = await prisma.idea.findUnique({
+        where: { id: id }
+    });
+
+    if (!existingIdea) {
+        throw new AppError(status.NOT_FOUND, "Idea not found!");
+    }
+
+    if (existingIdea.authorId !== userId) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to delete this idea!");
+    }
+    if ((existingIdea.isDeleted as any) === ArchiveStatus.TRUE) {
+        throw new AppError(status.BAD_REQUEST, "Idea is already deleted!");
+    }
+
+    const result = await prisma.idea.update({
+        where: { id: id },
+        data: {
+            isDeleted: true
+        }
+    });
+
+    return result;
+};
+
+
 export const IdeaService = {
     createIdea,
     getAllIdea,
     getIdeaById,
     updateIdea,
-    approveOrRejectIdea
+    approveOrRejectIdea,
+    getMyIdea,
+    deleteIdea
 };

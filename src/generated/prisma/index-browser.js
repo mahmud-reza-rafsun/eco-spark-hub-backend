@@ -198,6 +198,7 @@ exports.Prisma.IdeaScalarFieldEnum = {
   price: 'price',
   status: 'status',
   adminFeedback: 'adminFeedback',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   authorId: 'authorId',
@@ -246,11 +247,9 @@ exports.UserStatus = exports.$Enums.UserStatus = {
 };
 
 exports.IdeaStatus = exports.$Enums.IdeaStatus = {
-  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  UNPUBLISHED: 'UNPUBLISHED'
+  REJECTED: 'REJECTED'
 };
 
 exports.VoteType = exports.$Enums.VoteType = {

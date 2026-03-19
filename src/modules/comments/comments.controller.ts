@@ -43,7 +43,7 @@ const deleteComment = catchAsync(
             status: status.OK,
             success: true,
             message: "Delete comment successful!!",
-            // data: result
+            data: result
         })
     }
 )
