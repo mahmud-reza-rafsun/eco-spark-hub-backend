@@ -8,7 +8,8 @@ const createComment = catchAsync(
     async (req: Request, res: Response) => {
         const payload = req.body
         const user = req.user
-        const result = await CommentService.createComment(payload, user);
+        const { id } = req.params
+        const result = await CommentService.createComment(payload, user, id as string);
         sendResponse(res, {
             status: status.OK,
             success: true,
@@ -17,3 +18,7 @@ const createComment = catchAsync(
         })
     }
 )
+
+export const CommentController = {
+    createComment
+}

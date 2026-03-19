@@ -98,6 +98,34 @@ const getAllIdea = async (params: {
         skip,
         take: limitNum,
         include: {
+            comments: {
+                where: {
+                    parentId: null
+                },
+                include: {
+                    user: {
+                        select: {
+                            name: true,
+                            image: true,
+                            email: true
+                        }
+                    },
+                    replies: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                    email: true,
+                                    image: true,
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
             votes: {
                 include: {
                     user: {
@@ -122,6 +150,7 @@ const getAllIdea = async (params: {
             category: {
                 select: {
                     name: true,
+                    slug: true
                 },
             },
         },
@@ -151,6 +180,7 @@ const getIdeaById = async (id: string) => {
             id: id,
         },
         include: {
+            comments: true,
             votes: {
                 include: {
                     user: {
