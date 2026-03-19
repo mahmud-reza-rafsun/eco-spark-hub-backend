@@ -2,7 +2,7 @@ import status from "http-status"
 import { prisma } from "../../lib/prisma"
 import { AppError } from "../../shared/errors/app-error"
 import { IRequestUser } from "../auth/auth.interface"
-import { ICreateCommentPayload } from "./comment.interface"
+import { ICreateCommentPayload, IUpdateComment } from "./comment.interface"
 
 const createComment = async (payload: ICreateCommentPayload, user: IRequestUser, ideaId: string) => {
     const isUserLoggedIn = await prisma.user.findUnique({
@@ -39,6 +39,55 @@ const createComment = async (payload: ICreateCommentPayload, user: IRequestUser,
     return result
 }
 
+const updateComment = async (payload: IUpdateComment, id: string, user: IRequestUser) => {
+    const existingComment = await prisma.comment.findUnique({
+        where: { id: id },
+        select: { userId: true }
+    })
+    if (!existingComment) {
+        throw new AppError(status.NOT_FOUND, "Comment not found!");
+    }
+    if (existingComment.userId !== user.id) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to update this comment!");
+    }
+    const result = await prisma.comment.update({
+        where: { id: id },
+        data: {
+            ...payload,
+        }
+    });
+    return result
+}
+
+const deleteComment = async (id: string, user: IRequestUser) => {
+    const existingComment = await prisma.comment.findUnique({
+        where: { id: id },
+        select: { userId: true }
+    });
+
+    if (!existingComment) {
+        throw new AppError(status.NOT_FOUND, "Comment not found!");
+    }
+
+    const isAdmin = user.role === 'ADMIN';
+    const isOwner = existingComment.userId === user.id;
+
+    if (!isAdmin && !isOwner) {
+        throw new AppError(
+            status.FORBIDDEN,
+            "You can only delete your own comments. Admins can delete any comment."
+        );
+    }
+
+    const result = await prisma.comment.delete({
+        where: { id: id }
+    });
+
+    return result;
+};
+
 export const CommentService = {
-    createComment
+    createComment,
+    updateComment,
+    deleteComment
 }

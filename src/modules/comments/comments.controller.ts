@@ -19,6 +19,37 @@ const createComment = catchAsync(
     }
 )
 
+const updateComment = catchAsync(
+    async (req: Request, res: Response) => {
+        const payload = req.body;
+        const user = req.user;
+        const { id } = req.params;
+        const result = await CommentService.updateComment(payload, id as string, user);
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Update comment successful!!",
+            data: result
+        })
+    }
+)
+
+const deleteComment = catchAsync(
+    async (req: Request, res: Response) => {
+        const user = req.user;
+        const { id } = req.params;
+        const result = await CommentService.deleteComment(id as string, user);
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Delete comment successful!!",
+            // data: result
+        })
+    }
+)
+
 export const CommentController = {
-    createComment
+    createComment,
+    updateComment,
+    deleteComment
 }
