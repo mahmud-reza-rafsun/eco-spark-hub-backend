@@ -1,5 +1,5 @@
 import status from "http-status";
-import { VoteType } from "../../generated/prisma"
+import { VoteType } from "@prisma/client"
 import { prisma } from "../../lib/prisma"
 import { AppError } from "../../shared/errors/app-error";
 import { IRequestUser } from "../auth/auth.interface"

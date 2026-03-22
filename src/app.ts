@@ -6,14 +6,23 @@ import { cors } from "./config/cors";
 import { logger } from "./config/logger";
 import { limiter } from "./config/rate-limit";
 import { apiRoutes } from "./routes";
-import { globalErrorHandler } from "./middlewares/error.middleware";
 import { notFound } from "./middlewares/not-found.middleware";
 import { auth } from "./lib/auth";
 import { toNodeHandler } from "better-auth/node";
 import path from "path";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import { PaymentController } from "./modules/purchase/purchase.controller";
 
 // app initialization
 const app: Application = express();
+
+// webhook
+
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  PaymentController.handleStripeWebhookEvent
+);
 
 // app settings
 app.set("query parser", (str: string) => qs.parse(str));
@@ -21,7 +30,7 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/templates`));
 
 // middlewares
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json());
 app.use(helmet());
 app.use(logger);
 app.use(cors);
@@ -37,11 +46,10 @@ if (process.env.NODE_ENV === "production") {
 // Home page route
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({
-    title: "Welcome to your Express app",
-    description:
-      "Built with StackKit - A production-ready Express template with TypeScript, security, and best practices.",
+    title: "Welcome to EcoSpark Hub",
+    description: "A secure, production-ready backend engine built with TypeScript, ensuring high performance and scalable architecture.",
     version: "1.0.0",
-    docs: "https://vercel.com/templates",
+    backendRepository: "https://github.com/mahmud-reza-rafsun/eco-spark-hub-backend",
   });
 });
 

@@ -114,6 +114,17 @@ const deleteIdea = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getPendingIdeas = catchAsync(async (req: Request, res: Response) => {
+    const result = await IdeaService.getPendingIdeas();
+
+    sendResponse(res, {
+        status: status.OK,
+        success: true,
+        message: "Pending Idea Retrive successfully",
+        data: result,
+    });
+});
+
 export const IdeaController = {
     createIdea,
     getAllIdea,
@@ -121,5 +132,6 @@ export const IdeaController = {
     updateIdea,
     approveAndRejectIdea,
     getMyIdeas,
-    deleteIdea
+    deleteIdea,
+    getPendingIdeas
 }

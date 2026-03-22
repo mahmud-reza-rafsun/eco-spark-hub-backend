@@ -4,7 +4,7 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
 import { ICreateIdeaPayload, IUpdateIdeaPayload } from "./idea.interface";
 import { IRequestUser } from "../auth/auth.interface";
-import { ArchiveStatus, IdeaStatus, Role, UserStatus } from "../../generated/prisma";
+import { ArchiveStatus, IdeaStatus, Role, UserStatus } from "@prisma/client";
 
 const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     const { title, problem, solution, description, price, images, categoryId } = payload;
@@ -391,6 +391,15 @@ const deleteIdea = async (id: string, userId: string) => {
     return result;
 };
 
+const getPendingIdeas = async () => {
+    const result = await prisma.idea.findMany({
+        where: {
+            status: IdeaStatus.PENDING
+        }
+    })
+    return result;
+}
+
 
 export const IdeaService = {
     createIdea,
@@ -399,5 +408,6 @@ export const IdeaService = {
     updateIdea,
     approveOrRejectIdea,
     getMyIdea,
-    deleteIdea
+    deleteIdea,
+    getPendingIdeas
 };

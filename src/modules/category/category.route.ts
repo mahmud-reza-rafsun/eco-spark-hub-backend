@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { checkAuth } from "../../middlewares/checkAuth";
-import { Role } from "../../generated/prisma";
+import { Role } from "@prisma/client";
 import { categoryController } from "./category.controller";
 
 const route = Router();

@@ -14,6 +14,7 @@
     "migrate": "prisma migrate dev",
     "studio": "prisma studio",
     "build": "prisma generate && tsup",
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -33,8 +34,10 @@
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.12",
+    "pdfkit": "^0.18.0",
     "pg": "^8.0.0",
     "qs": "^6.14.1",
+    "stripe": "^20.4.1",
     "tsup": "^8.5.1",
     "zod": "^4.3.6"
   },
@@ -49,6 +52,7 @@
     "@types/multer": "^2.1.0",
     "@types/node": "^25.0.8",
     "@types/nodemailer": "^7.0.5",
+    "@types/pdfkit": "^0.17.5",
     "@types/qs": "^6.14.0",
     "eslint": "^9.39.2",
     "prisma": "^7.4.2",

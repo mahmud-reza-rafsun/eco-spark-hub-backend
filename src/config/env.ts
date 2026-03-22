@@ -34,7 +34,9 @@ interface EnvConfig {
   CLOUDINARY_CLOUD_NAME: string;
   CLOUDINARY_API_KEY: string;
   CLOUDINARY_API_SECRET: string;
-
+  STRIPE_SECRET_KEY?: string;
+  STRIPE_WEBHOOK_SECRET?: string;
+  SUPER_ADMIN_EMAIL?: string;
 }
 
 const loadEnvVars = (): EnvConfig => {
@@ -63,7 +65,10 @@ const loadEnvVars = (): EnvConfig => {
     "REFRESH_TOKEN_EXPIRES_IN",
     "CLOUDINARY_CLOUD_NAME",
     "CLOUDINARY_API_KEY",
-    "CLOUDINARY_API_SECRET"
+    "CLOUDINARY_API_SECRET",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "SUPER_ADMIN_EMAIL"
   ];
 
   requiredEnvVars.forEach((varName) => {
@@ -92,7 +97,7 @@ const loadEnvVars = (): EnvConfig => {
       SMTP_PORT: process.env.EMAIL_SENDER_SMTP_PORT as string,
       SMTP_FROM: process.env.EMAIL_SENDER_SMTP_FROM as string,
     },
-    APP_NAME: process.env.APP_NAME ?? "Your App",
+    APP_NAME: process.env.APP_NAME ?? "Eco Spark Hub",
     APP_URL: process.env.APP_URL as string,
     NODE_ENV: process.env.NODE_ENV as string,
     PORT: process.env.PORT as string,
@@ -107,6 +112,9 @@ const loadEnvVars = (): EnvConfig => {
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STIPE_WEBHOOK_SECRET,
+    SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL,
   };
 };
 

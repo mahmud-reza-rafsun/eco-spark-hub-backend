@@ -1,7 +1,10 @@
 import createCors from "cors";
 import { envVars } from "./env";
+// import { envVars } from "./env";
 
 const origin = [envVars.FRONTEND_URL as string, "http://localhost:3000"];
+
+
 
 const cors = createCors({
   origin,
@@ -9,5 +12,7 @@ const cors = createCors({
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 });
+
+
 
 export { cors };

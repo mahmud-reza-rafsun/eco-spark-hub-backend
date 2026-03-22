@@ -24,3 +24,8 @@ enum ArchiveStatus {
     TRUE
     FALSE
 }
+
+enum PaymentStatus {
+    PAID
+    UNPAID
+}

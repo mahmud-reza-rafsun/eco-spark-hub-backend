@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { checkAuth } from "../../middlewares/checkAuth";
-import { Role } from "../../generated/prisma";
+import { Role } from "@prisma/client";
 import { IdeaController } from "./idea.controller";
 
 const route = Router();
 route.post("/create-idea", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.createIdea);
-route.get("/get-all-idea", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.getAllIdea);
+route.get("/get-all-idea", IdeaController.getAllIdea);
+route.get("/get-pending-idea", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.getPendingIdeas);
 route.get("/get-my-idea", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.getMyIdeas);
 route.get("/:id", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.getIdeaById);
 route.patch("/:id", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.updateIdea);
