@@ -1,8 +1,8 @@
 import { catchAsync } from "../../shared/utils/catch-async";
-import { UserServices } from "./admin.service";
+import { AdminServices } from "./admin.service";
 
 const getAllUsers = catchAsync(async (req, res) => {
-    const result = await UserServices.getAllUsersFromDB();
+    const result = await AdminServices.getAllUsersFromDB();
 
     res.status(200).json({
         success: true,
@@ -15,6 +15,46 @@ const getAllUsers = catchAsync(async (req, res) => {
     });
 });
 
-export const UserControllers = {
+const getTotalRevenue = catchAsync(async (req, res) => {
+    const result = await AdminServices.getTotalRevenueWithPurchasesFromDB();
+
+    res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: "Revenue and purchase history retrieved successfully",
+        data: result,
+    });
+});
+
+const toggleUserBlockStatus = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const adminId = req.user?.id as string;
+    const result = await AdminServices.toggleUserBlockStatus(id as string, adminId);
+
+    res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: "User blocked successfully",
+        data: result,
+    });
+});
+
+const deleteUser = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const adminId = req.user?.id as string;
+    const result = await AdminServices.deleteUser(id as string, adminId);
+
+    res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: "User deleted successfully",
+        data: result,
+    });
+});
+
+export const AdminControllers = {
+    getTotalRevenue,
     getAllUsers,
+    toggleUserBlockStatus,
+    deleteUser,
 };
