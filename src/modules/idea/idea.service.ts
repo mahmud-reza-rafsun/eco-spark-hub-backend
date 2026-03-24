@@ -267,14 +267,14 @@ const updateIdea = async (user: IRequestUser, id: string, payload: IUpdateIdeaPa
 }
 
 const approveOrRejectIdea = async (user: IRequestUser, id: string, payload: { status: string; feedback?: string }) => {
-    // const isUserAdmin = await prisma.user.findUnique({
-    //     where: { id: user.id },
-    //     select: { role: true }
-    // });
+    const isUserAdmin = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { role: true }
+    });
 
-    // if (isUserAdmin?.role !== Role.ADMIN) {
-    //     throw new AppError(status.UNAUTHORIZED, "Unauthorized Access!!!");
-    // }
+    if (isUserAdmin?.role !== Role.ADMIN) {
+        throw new AppError(status.UNAUTHORIZED, "Unauthorized Access!!!");
+    }
 
     const updateData: any = {
         status: payload.status,

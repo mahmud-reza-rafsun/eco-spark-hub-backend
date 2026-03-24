@@ -6,6 +6,7 @@ import { VoteRoute } from "../modules/vote/vote.route";
 import { CommentRoute } from "../modules/comments/comments.route";
 import { PaymentRoutes } from "../modules/purchase/purchase.route";
 import { AdminRoutes } from "../modules/admin/admin.route";
+import { MemberRoutes } from "../modules/member/member.route";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/vote", VoteRoute);
 router.use("/comment", CommentRoute)
 router.use("/payment", PaymentRoutes)
 router.use("/admin", AdminRoutes)
+router.use("/member", MemberRoutes)
 
 export const apiRoutes = router;
