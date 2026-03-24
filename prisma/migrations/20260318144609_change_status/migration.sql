@@ -1,2 +1,0 @@
--- AlterEnum
-ALTER TYPE "IdeaStatus" ADD VALUE 'UNPUBLISHED';

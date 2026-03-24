@@ -7,6 +7,7 @@ const getAllUsersFromDB = async () => {
             id: true,
             name: true,
             email: true,
+            image: true,
             role: true,
             status: true,
             createdAt: true,
@@ -34,6 +35,7 @@ const getTotalRevenueWithPurchasesFromDB = async () => {
                 select: {
                     name: true,
                     email: true,
+                    image: true
                 },
             },
             idea: {

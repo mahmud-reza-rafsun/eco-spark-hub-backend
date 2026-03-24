@@ -1,5 +1,5 @@
 model Idea {
-  id          String @id @default(cuid())
+  id          String @id @default(uuid())
   title       String
   problem     String @db.Text
   solution    String @db.Text

@@ -1,5 +1,5 @@
 model Purchase {
-  id                 String        @id @default(cuid())
+  id                 String        @id @default(uuid())
   amount             Float
   transactionId      String        @unique
   stripeEventId      String?       @unique
