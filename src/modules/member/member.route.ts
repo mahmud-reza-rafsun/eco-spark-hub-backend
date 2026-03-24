@@ -6,5 +6,6 @@ import { MemberController } from "./member.controller";
 const route = Router();
 
 route.get("/get-my-pending-ideas", checkAuth(Role.MEMBER), MemberController.getMyPendingIdeas);
+route.get("/get-my-purchase-ideas", checkAuth(Role.MEMBER), MemberController.getMyPurchaseIdea);
 
 export const MemberRoutes = route;
