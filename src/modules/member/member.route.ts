@@ -7,5 +7,6 @@ const route = Router();
 
 route.get("/get-my-pending-ideas", checkAuth(Role.MEMBER), MemberController.getMyPendingIdeas);
 route.get("/get-my-purchase-ideas", checkAuth(Role.MEMBER), MemberController.getMyPurchaseIdea);
+route.get("/get-member-stat", checkAuth(Role.ADMIN, Role.MEMBER), MemberController.getMemberStat);
 
 export const MemberRoutes = route;

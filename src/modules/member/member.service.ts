@@ -75,7 +75,66 @@ const getMyPurchaseIdea = async (userEmail: string) => {
     };
 };
 
+const getMemberStat = async (memberId: string) => {
+    const [
+        pendingIdeas,
+        purchasedIdeas,
+        totalComments,
+        totalUpvotes,
+        totalDownvotes
+    ] = await Promise.all([
+        prisma.idea.count({
+            where: {
+                authorId: memberId,
+                status: 'PENDING'
+            }
+        }),
+        prisma.purchase.count({
+            where: {
+                userId: memberId
+            }
+        }),
+        prisma.comment.count({
+            where: {
+                userId: memberId
+            }
+        }),
+        prisma.vote.count({
+            where: {
+                userId: memberId,
+                type: 'UPVOTE'
+            }
+        }),
+        prisma.vote.count({
+            where: {
+                userId: memberId,
+                type: 'DOWNVOTE'
+            }
+        }),
+    ]);
+    const memberChartData = [
+        { name: "Pending Ideas", total: pendingIdeas },
+        { name: "Purchases", total: purchasedIdeas },
+        { name: "Comments", total: totalComments },
+        { name: "Upvotes", total: totalUpvotes },
+        { name: "Downvotes", total: totalDownvotes }
+    ];
+
+    return {
+        summary: {
+            pendingIdeas,
+            purchasedIdeas,
+            totalComments,
+            totalUpvotes,
+            totalDownvotes,
+            totalActivity: totalComments + totalUpvotes + totalDownvotes
+        },
+        memberChartData
+    };
+};
+
 export const MemberService = {
     getMyPendingIdeas,
-    getMyPurchaseIdea
+    getMyPurchaseIdea,
+    getMemberStat
 };

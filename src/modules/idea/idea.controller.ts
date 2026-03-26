@@ -125,6 +125,8 @@ const getPendingIdeas = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+
+
 export const IdeaController = {
     createIdea,
     getAllIdea,

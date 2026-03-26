@@ -117,9 +117,84 @@ const deleteUser = async (targetId: string, adminId: string) => {
     return result;
 };
 
+const getAdminStat = async (adminId: string) => {
+    const [
+        totalAdmin,
+        totalMember,
+        totalIdea,
+        totalCategory,
+        revenueData,
+        totalComments,
+        totalUpvotes,
+        totalDownvotes
+    ] = await Promise.all([
+        // Admin count
+        prisma.user.count({
+            where: {
+                role: Role.ADMIN
+            }
+        }),
+        // Member count
+        prisma.user.count({
+            where: {
+                role: Role.MEMBER
+            }
+        }),
+        prisma.idea.count(),
+        prisma.category.count(),
+        prisma.idea.aggregate({
+            _sum: {
+                price: true,
+            },
+        }),
+        prisma.comment.count(),
+        prisma.vote.count({
+            where: {
+                userId: adminId,
+                type: 'UPVOTE'
+            }
+        }),
+        prisma.vote.count({
+            where: {
+                userId: adminId,
+                type: 'DOWNVOTE'
+            }
+        }),
+    ]);
+
+    const totalRevenue = revenueData._sum.price || 0;
+
+    const chartData = [
+        { name: "Admins", total: totalAdmin },
+        { name: "Members", total: totalMember },
+        { name: "Ideas", total: totalIdea },
+        { name: "Categories", total: totalCategory },
+        { name: "Revenue", total: totalRevenue },
+        { name: "Comments", total: totalComments },
+        { name: "Upvotes", total: totalUpvotes },
+        { name: "Downvotes", total: totalDownvotes }
+    ];
+
+    return {
+        summary: {
+            totalAdmin,
+            totalMember,
+            totalUser: totalAdmin + totalMember,
+            totalIdea,
+            totalCategory,
+            totalRevenue,
+            totalComments,
+            totalUpvotes,
+            totalDownvotes
+        },
+        chartData
+    };
+};
+
 export const AdminServices = {
     getAllUsersFromDB,
     getTotalRevenueWithPurchasesFromDB,
     toggleUserBlockStatus,
     deleteUser,
+    getAdminStat
 };

@@ -52,9 +52,21 @@ const deleteUser = catchAsync(async (req, res) => {
     });
 });
 
+const getAdminStat = catchAsync(async (req, res) => {
+    const admin = req.user;
+    const result = await AdminServices.getAdminStat(admin.id);
+    res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: "Admin stat retrieved successfully",
+        data: result,
+    });
+});
+
 export const AdminControllers = {
     getTotalRevenue,
     getAllUsers,
     toggleUserBlockStatus,
     deleteUser,
+    getAdminStat
 };

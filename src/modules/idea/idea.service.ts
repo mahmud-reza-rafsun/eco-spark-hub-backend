@@ -184,6 +184,13 @@ const getIdeaById = async (id: string) => {
             isDeleted: false
         },
         include: {
+            author: {
+                select: {
+                    name: true,
+                    email: true,
+                    image: true
+                }
+            },
             comments: {
                 where: {
                     parentId: null

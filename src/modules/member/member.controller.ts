@@ -29,8 +29,21 @@ const getMyPurchaseIdea = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getMemberStat = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+    const result = await MemberService.getMemberStat(user.id);
+
+    sendResponse(res, {
+        status: status.OK,
+        success: true,
+        message: "Member statistics fetched successfully",
+        data: result,
+    });
+});
+
 
 export const MemberController = {
     getMyPendingIdeas,
-    getMyPurchaseIdea
+    getMyPurchaseIdea,
+    getMemberStat
 }
