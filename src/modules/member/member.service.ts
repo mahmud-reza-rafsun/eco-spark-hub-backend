@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IdeaStatus } from "@prisma/client";
+import { IdeaStatus, VoteType } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const getMyPendingIdeas = async (userEmail: string) => {
@@ -77,16 +77,33 @@ const getMyPurchaseIdea = async (userEmail: string) => {
 
 const getMemberStat = async (memberId: string) => {
     const [
+        activeIdeas,
         pendingIdeas,
+        rejectedIdeas,
         purchasedIdeas,
         totalComments,
         totalUpvotes,
         totalDownvotes
     ] = await Promise.all([
+        // Active (Approved) Ideas
         prisma.idea.count({
             where: {
                 authorId: memberId,
-                status: 'PENDING'
+                status: IdeaStatus.APPROVED
+            }
+        }),
+        // Pending Ideas
+        prisma.idea.count({
+            where: {
+                authorId: memberId,
+                status: IdeaStatus.PENDING
+            }
+        }),
+        // Rejected Ideas
+        prisma.idea.count({
+            where: {
+                authorId: memberId,
+                status: IdeaStatus.REJECTED
             }
         }),
         prisma.purchase.count({
@@ -102,19 +119,22 @@ const getMemberStat = async (memberId: string) => {
         prisma.vote.count({
             where: {
                 userId: memberId,
-                type: 'UPVOTE'
+                type: VoteType.UPVOTE
             }
         }),
         prisma.vote.count({
             where: {
                 userId: memberId,
-                type: 'DOWNVOTE'
+                type: VoteType.DOWNVOTE
             }
         }),
     ]);
+
     const memberChartData = [
-        { name: "Pending Ideas", total: pendingIdeas },
-        { name: "Purchases", total: purchasedIdeas },
+        { name: "Active Idea", total: activeIdeas },
+        { name: "Pending Idea", total: pendingIdeas },
+        { name: "Rejected Idea", total: rejectedIdeas },
+        { name: "Purchases Idea", total: purchasedIdeas },
         { name: "Comments", total: totalComments },
         { name: "Upvotes", total: totalUpvotes },
         { name: "Downvotes", total: totalDownvotes }
@@ -122,12 +142,15 @@ const getMemberStat = async (memberId: string) => {
 
     return {
         summary: {
+            activeIdeas,
             pendingIdeas,
+            rejectedIdeas,
             purchasedIdeas,
             totalComments,
             totalUpvotes,
             totalDownvotes,
-            totalActivity: totalComments + totalUpvotes + totalDownvotes
+            totalActivity: totalComments + totalUpvotes + totalDownvotes,
+            totalPosts: activeIdeas + pendingIdeas + rejectedIdeas
         },
         memberChartData
     };
