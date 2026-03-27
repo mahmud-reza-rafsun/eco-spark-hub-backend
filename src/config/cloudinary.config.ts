@@ -39,8 +39,8 @@ export const uploadFileToCloudinary = async (
     return new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream({
             resource_type: "auto",
-            public_id: `next-gen-healthcare/${folderPath}/${uniqueName}`,
-            folder: `next-gen-healthcare/${folderPath}`,
+            public_id: `ecospark-hub/${folderPath}/${uniqueName}`,
+            folder: `ecospark-hub/${folderPath}`,
         },
             (error, result) => {
                 if (error) {

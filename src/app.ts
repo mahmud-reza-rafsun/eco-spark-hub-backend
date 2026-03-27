@@ -17,9 +17,8 @@ import { PaymentController } from "./modules/purchase/purchase.controller";
 const app: Application = express();
 
 // webhook
-
 app.post(
-  "/webhook",
+  "/api/v1/payment/webhook",
   express.raw({ type: "application/json" }),
   PaymentController.handleStripeWebhookEvent
 );
