@@ -64,8 +64,14 @@ const getAllIdea = async (params: {
     categoryId?: string;
     userId?: string;
     sortBy?: string;
+    page?: string;
+    limit?: string;
 }) => {
-    const { searchTerm, categoryId, userId, sortBy } = params;
+    const { searchTerm, categoryId, userId, sortBy, page = '1', limit = '6' } = params;
+
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+    const skip = (pageNum - 1) * limitNum;
 
     const whereConditions: any = {
         isDeleted: false,
@@ -90,6 +96,8 @@ const getAllIdea = async (params: {
 
     const result = await prisma.idea.findMany({
         where: whereConditions,
+        skip: skip,
+        take: limitNum,
         include: {
             comments: {
                 where: { parentId: null },
@@ -105,6 +113,10 @@ const getAllIdea = async (params: {
             _count: { select: { votes: true, comments: true } }
         },
         orderBy,
+    });
+
+    const total = await prisma.idea.count({
+        where: whereConditions
     });
 
     const transformedData = result.map((idea) => {
@@ -123,6 +135,12 @@ const getAllIdea = async (params: {
 
     return {
         data: transformedData,
+        meta: {
+            page: pageNum,
+            limit: limitNum,
+            total,
+            totalPages: Math.ceil(total / limitNum),
+        },
     };
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { catchAsync } from "../../shared/utils/catch-async";
 import { IdeaService } from "./idea.service";
@@ -18,20 +19,17 @@ const createIdea = catchAsync(
         })
     }
 );
-const getAllIdea = catchAsync(
-    async (req: Request, res: Response) => {
-        const params = req.query;
-        const result = await IdeaService.getAllIdea(params);
+const getAllIdea = catchAsync(async (req: Request, res: Response) => {
+    const params = req.query;
+    const result: any = await IdeaService.getAllIdea(params);
 
-        sendResponse(res, {
-            status: status.OK,
-            success: true,
-            message: "Retrieved all ideas successfully!!",
-            meta: result.meta,
-            data: result.data,
-        });
-    }
-);
+    sendResponse(res, {
+        status: status.OK,
+        success: true,
+        message: "Retrieved all ideas successfully!!",
+        data: result,
+    });
+});
 
 const getIdeaById = catchAsync(
     async (req: Request, res: Response) => {
