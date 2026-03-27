@@ -64,8 +64,9 @@ const getAllIdea = async (params: {
     categoryId?: string;
     page?: string;
     limit?: string;
+    userId?: string;
 }) => {
-    const { searchTerm, categoryId, page = '1', limit = '10' } = params;
+    const { searchTerm, categoryId, page = '1', limit = '10', userId } = params;
 
     const pageNum = Number(page);
     const limitNum = Number(limit);
@@ -75,20 +76,8 @@ const getAllIdea = async (params: {
         ...(categoryId && { categoryId }),
         ...(searchTerm && {
             OR: [
-                {
-                    title: {
-                        contains: searchTerm,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    category: {
-                        name: {
-                            contains: searchTerm,
-                            mode: 'insensitive',
-                        },
-                    },
-                },
+                { title: { contains: searchTerm, mode: 'insensitive' } },
+                { category: { name: { contains: searchTerm, mode: 'insensitive' } } },
             ],
         }),
     };
@@ -102,68 +91,38 @@ const getAllIdea = async (params: {
         take: limitNum,
         include: {
             comments: {
-                where: {
-                    parentId: null
-                },
+                where: { parentId: null },
                 include: {
-                    user: {
-                        select: {
-                            name: true,
-                            image: true,
-                            email: true
-                        }
-                    },
-                    replies: {
-                        include: {
-                            user: {
-                                select: {
-                                    name: true,
-                                    email: true,
-                                    image: true,
-                                }
-                            }
-                        }
-                    }
+                    user: { select: { name: true, image: true, email: true } },
+                    replies: { include: { user: { select: { name: true, email: true, image: true } } } }
                 },
-                orderBy: {
-                    createdAt: 'desc'
-                }
+                orderBy: { createdAt: 'desc' }
             },
-            votes: {
-                include: {
-                    user: {
-                        select: {
-                            name: true,
-                            email: true
-                        }
-                    }
-                }
-            },
-            _count: {
-                select: {
-                    votes: true
-                }
-            },
-            author: {
-                select: {
-                    name: true,
-                    email: true,
-                },
-            },
-            category: {
-                select: {
-                    name: true,
-                    slug: true
-                },
-            },
+            votes: true,
+            category: { select: { name: true, slug: true } },
+            author: { select: { name: true, email: true } },
+            _count: { select: { votes: true } }
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
+    });
+
+    const transformedData = result.map((idea) => {
+        const upvotes = idea.votes.filter(v => v.type === 'UPVOTE').length;
+        const downvotes = idea.votes.filter(v => v.type === 'DOWNVOTE').length;
+
+        const userVote = idea.votes.find(v => v.userId === userId)?.type || null;
+
+        return {
+            ...idea,
+            upvotes,
+            downvotes,
+            userVote,
+            votes: undefined
+        };
     });
 
     const total = await prisma.idea.count({
-        where: whereConditions,
+        where: { ...whereConditions, isDeleted: false },
     });
 
     return {
@@ -173,7 +132,7 @@ const getAllIdea = async (params: {
             total,
             totalPages: Math.ceil(total / limitNum),
         },
-        data: result,
+        data: transformedData,
     };
 };
 

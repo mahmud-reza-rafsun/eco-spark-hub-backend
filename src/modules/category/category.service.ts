@@ -1,16 +1,17 @@
 // import status from "http-status";
+import status from "http-status";
 import { prisma } from "../../lib/prisma";
-// import { AppError } from "../../shared/errors/app-error";
-// import { IRequestUser } from "../auth/auth.interface";
+import { AppError } from "../../shared/errors/app-error";
 import { ICreateCategoryPayload, IUpdateCategoryPayload } from "./category.interface";
-// user: IRequestUser
-const createCategory = async (payload: ICreateCategoryPayload,) => {
-    // const isUserExist = await prisma.user.findUnique({
-    //     where: { id: user.id }
-    // });
-    // if (!isUserExist) {
-    //     throw new AppError(status.UNAUTHORIZED, "User not found!!!");
-    // }
+import { IRequestUser } from "../auth/auth.interface";
+
+const createCategory = async (user: IRequestUser, payload: ICreateCategoryPayload,) => {
+    const isUserExist = await prisma.user.findUnique({
+        where: { id: user.id }
+    });
+    if (!isUserExist) {
+        throw new AppError(status.UNAUTHORIZED, "User not found!!!");
+    }
     const result = await prisma.category.create({
         data: {
             name: payload.name,

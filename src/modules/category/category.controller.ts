@@ -7,8 +7,8 @@ import status from "http-status";
 const createCategory = catchAsync(
     async (req: Request, res: Response) => {
         const payload = req.body;
-        // const user = req.user;user
-        const result = await categoryService.createCategory(payload);
+        const user = req.user
+        const result = await categoryService.createCategory(user, payload);
         sendResponse(res, {
             status: status.OK,
             success: true,

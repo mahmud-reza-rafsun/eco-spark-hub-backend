@@ -19,6 +19,20 @@ const createComment = catchAsync(
     }
 )
 
+const getCommentsByIdeaId = catchAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const result = await CommentService.getCommentsByIdeaId(id as string);
+
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Comments fetched successfully!",
+            data: result
+        });
+    }
+);
+
 const updateComment = catchAsync(
     async (req: Request, res: Response) => {
         const payload = req.body;
@@ -50,6 +64,7 @@ const deleteComment = catchAsync(
 
 export const CommentController = {
     createComment,
+    getCommentsByIdeaId,
     updateComment,
     deleteComment
 }

@@ -378,8 +378,6 @@ const resetPassword = async (email: string, otp: string, newPassword: string) =>
             userId: isUserExist.id,
         }
     })
-
-
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

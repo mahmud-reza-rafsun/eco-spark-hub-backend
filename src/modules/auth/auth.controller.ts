@@ -185,8 +185,8 @@ const forgetPassword = catchAsync(
 
 const resetPassword = catchAsync(
     async (req: Request, res: Response) => {
-        const { email, otp, newPassword } = req.body;
-        await authService.resetPassword(email, otp, newPassword);
+        const { email, otp, password } = req.body;
+        await authService.resetPassword(email, otp, password);
 
         sendResponse(res, {
             status: status.OK,

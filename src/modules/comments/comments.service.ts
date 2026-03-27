@@ -39,6 +39,55 @@ const createComment = async (payload: ICreateCommentPayload, user: IRequestUser,
     return result
 }
 
+const getCommentsByIdeaId = async (ideaId: string) => {
+    const result = await prisma.comment.findMany({
+        where: {
+            ideaId: ideaId,
+            parentId: null
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                    email: true
+                }
+            },
+            replies: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true
+                        }
+                    },
+                    replies: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    image: true
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: 'asc'
+                }
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
+        }
+    });
+
+    return result;
+};
+
 const updateComment = async (payload: IUpdateComment, id: string, user: IRequestUser) => {
     const existingComment = await prisma.comment.findUnique({
         where: { id: id },
@@ -88,6 +137,7 @@ const deleteComment = async (id: string, user: IRequestUser) => {
 
 export const CommentService = {
     createComment,
+    getCommentsByIdeaId,
     updateComment,
     deleteComment
 }
