@@ -12,7 +12,7 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     const isUserExist = await prisma.user.findUnique({
         where: {
             id: id,
-            isDeleted: false
+            isDeleted: false,
         }
     });
 
@@ -39,7 +39,8 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
             price: Number(price),
             images: images,
             authorId: isUserExist.id,
-            categoryId: isCategoryExist.id
+            categoryId: isCategoryExist.id,
+            status: IdeaStatus.PENDING
         },
         include: {
             author: {
@@ -75,6 +76,7 @@ const getAllIdea = async (params: {
 
     const whereConditions: any = {
         isDeleted: false,
+        status: IdeaStatus.APPROVED,
         ...(categoryId && { categoryId }),
         ...(searchTerm && {
             OR: [
