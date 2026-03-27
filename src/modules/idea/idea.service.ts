@@ -62,17 +62,13 @@ const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
 const getAllIdea = async (params: {
     searchTerm?: string;
     categoryId?: string;
-    page?: string;
-    limit?: string;
     userId?: string;
+    sortBy?: string;
 }) => {
-    const { searchTerm, categoryId, page = '1', limit = '10', userId } = params;
-
-    const pageNum = Number(page);
-    const limitNum = Number(limit);
-    const skip = (pageNum - 1) * limitNum;
+    const { searchTerm, categoryId, userId, sortBy } = params;
 
     const whereConditions: any = {
+        isDeleted: false,
         ...(categoryId && { categoryId }),
         ...(searchTerm && {
             OR: [
@@ -82,13 +78,18 @@ const getAllIdea = async (params: {
         }),
     };
 
+    let orderBy: any = { createdAt: 'desc' };
+
+    if (sortBy === 'oldest') {
+        orderBy = { createdAt: 'asc' };
+    } else if (sortBy === 'alphabetical') {
+        orderBy = { title: 'asc' };
+    } else if (sortBy === 'popular') {
+        orderBy = { votes: { _count: 'desc' } };
+    }
+
     const result = await prisma.idea.findMany({
-        where: {
-            ...whereConditions,
-            isDeleted: false
-        },
-        skip,
-        take: limitNum,
+        where: whereConditions,
         include: {
             comments: {
                 where: { parentId: null },
@@ -101,15 +102,14 @@ const getAllIdea = async (params: {
             votes: true,
             category: { select: { name: true, slug: true } },
             author: { select: { name: true, email: true } },
-            _count: { select: { votes: true } }
+            _count: { select: { votes: true, comments: true } }
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy,
     });
 
     const transformedData = result.map((idea) => {
         const upvotes = idea.votes.filter(v => v.type === 'UPVOTE').length;
         const downvotes = idea.votes.filter(v => v.type === 'DOWNVOTE').length;
-
         const userVote = idea.votes.find(v => v.userId === userId)?.type || null;
 
         return {
@@ -121,20 +121,11 @@ const getAllIdea = async (params: {
         };
     });
 
-    const total = await prisma.idea.count({
-        where: { ...whereConditions, isDeleted: false },
-    });
-
     return {
-        meta: {
-            page: pageNum,
-            limit: limitNum,
-            total,
-            totalPages: Math.ceil(total / limitNum),
-        },
         data: transformedData,
     };
 };
+
 
 const getIdeaById = async (id: string) => {
     const result = await prisma.idea.findUnique({
