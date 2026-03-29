@@ -213,33 +213,33 @@ const updateIdea = async (user: IRequestUser, id: string, payload: IUpdateIdeaPa
     const idea = await prisma.idea.findUnique({
         where: {
             id: id,
-            isDeleted: true
+            isDeleted: false
         },
         select: {
+            id: true,
             status: true,
-            id: true
+            authorId: true
         }
     });
+
     if (!idea) {
         throw new AppError(status.NOT_FOUND, "Idea Not Found");
     }
-    const isOwner = idea.id === user.id;
+    const isOwner = idea.authorId === user.id;
     const isAdmin = user.role === Role.ADMIN;
 
     if (!isOwner && !isAdmin) {
         throw new AppError(status.FORBIDDEN, "You are not allowed to update this idea.");
     }
 
-    if (idea.status === IdeaStatus.PENDING || idea.status === IdeaStatus.APPROVED) {
-        throw new AppError(
-            status.BAD_REQUEST,
-            `Cannot update an idea that is already ${idea.status.toLowerCase()}.`
-        );
-    }
+    const extractData = (payload as any).payload ? (payload as any).payload : payload;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _, authorId, createdAt, updatedAt, ...finalData } = extractData;
 
     return await prisma.idea.update({
         where: { id: id },
-        data: payload
+        data: finalData,
     });
 }
 
@@ -351,8 +351,8 @@ const deleteIdea = async (id: string, userId: string) => {
         throw new AppError(status.NOT_FOUND, "Idea not found!");
     }
 
-    if (existingIdea.authorId !== userId) {
-        throw new AppError(status.FORBIDDEN, "You are not authorized to delete this idea!");
+    if (existingIdea.authorId === userId) {
+        throw new AppError(status.OK, "You are authorized to delete this idea!");
     }
     if ((existingIdea.isDeleted as any) === ArchiveStatus.TRUE) {
         throw new AppError(status.BAD_REQUEST, "Idea is already deleted!");
@@ -371,7 +371,11 @@ const deleteIdea = async (id: string, userId: string) => {
 const getPendingIdeas = async () => {
     const result = await prisma.idea.findMany({
         where: {
-            status: { in: [IdeaStatus.PENDING, IdeaStatus.REJECTED] }
+            status: { in: [IdeaStatus.PENDING, IdeaStatus.REJECTED] },
+            isDeleted: false
+        },
+        orderBy: {
+            createdAt: 'desc'
         },
         select: {
             id: true,
@@ -379,11 +383,20 @@ const getPendingIdeas = async () => {
             images: true,
             price: true,
             status: true,
+            problem: true,
+            solution: true,
+            description: true,
             author: {
                 select: {
                     name: true,
                     email: true,
                     image: true
+                }
+            },
+            category: {
+                select: {
+                    name: true,
+                    slug: true
                 }
             }
         }
