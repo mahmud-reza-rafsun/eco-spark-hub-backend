@@ -19,6 +19,9 @@ const getMyPendingIdeas = async (userEmail: string) => {
             price: true,
             status: true,
             adminFeedback: true,
+            solution: true,
+            problem: true,
+            description: true,
             author: {
                 select: {
                     name: true,
