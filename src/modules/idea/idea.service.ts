@@ -4,7 +4,7 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
 import { ICreateIdeaPayload, IUpdateIdeaPayload } from "./idea.interface";
 import { IRequestUser } from "../auth/auth.interface";
-import { ArchiveStatus, IdeaStatus, Role, UserStatus } from "@prisma/client";
+import { IdeaStatus, Role, UserStatus } from "@prisma/client";
 
 const createIdea = async (payload: ICreateIdeaPayload, id: string) => {
     const { title, problem, solution, description, price, images, categoryId } = payload;
@@ -175,11 +175,11 @@ const getIdeaById = async (id: string) => {
                     },
                     replies: {
                         include: {
-                            user: {
-                                select: {
-                                    name: true,
-                                    email: true,
-                                    image: true,
+                            user: true,
+                            replies: {
+                                include: {
+                                    user: true,
+                                    replies: { include: { user: true } }
                                 }
                             }
                         }
@@ -306,19 +306,25 @@ const getMyIdea = async (id: string, userId: string) => {
                 },
                 include: {
                     user: {
-                        select: {
-                            name: true,
-                            image: true,
-                            email: true
-                        }
+                        select: { name: true, image: true, email: true }
                     },
                     replies: {
                         include: {
                             user: {
-                                select: {
-                                    name: true,
-                                    email: true,
-                                    image: true,
+                                select: { name: true, image: true, email: true }
+                            },
+                            replies: {
+                                include: {
+                                    user: {
+                                        select: { name: true, image: true, email: true }
+                                    },
+                                    replies: {
+                                        include: {
+                                            user: {
+                                                select: { name: true, image: true, email: true }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -330,11 +336,7 @@ const getMyIdea = async (id: string, userId: string) => {
             },
             category: true,
             author: {
-                select: {
-                    name: true,
-                    email: true,
-                    role: true
-                }
+                select: { name: true, email: true, role: true }
             }
         }
     });
