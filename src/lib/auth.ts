@@ -23,20 +23,38 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
   },
+
   session: {
+    expiresIn: 60 * 60 * 60 * 24,
+    updateAge: 60 * 60 * 60 * 24,
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60,
+      maxAge: 60 * 60 * 60 * 24,
     },
   },
+
   advanced: {
-    cookiePrefix: "better-auth",
-    useSecureCookies: process.env.NODE_ENV === "production",
-    crossSubDomainCookies: {
-      enabled: false,
+    useSecureCookies: false,
+    cookies: {
+      state: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          path: "/",
+        },
+      },
+      sessionToken: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          path: "/",
+        },
+      },
     },
-    disableCSRFCheck: true,
   },
+
   socialProviders: {
     google: {
       clientId: envVars.GOOGLE_CLIENT_ID as string,
@@ -101,8 +119,6 @@ export const auth = betterAuth({
             },
           });
 
-
-
           if (!user) {
             console.error(
               `User with email ${email} not found. Cannot send verification OTP.`,
@@ -149,36 +165,8 @@ export const auth = betterAuth({
       otpLength: 6,
     }),
   ],
-  // session: {
-  //   expiresIn: 60 * 60 * 60 * 24, // 1 day in seconds
-  //   updateAge: 60 * 60 * 60 * 24, // 1 day in seconds
-  //   cookieCache: {
-  //     enabled: true,
-  //     maxAge: 60 * 60 * 60 * 24, // 1 day in seconds
-  //   },
-  // },
+
   redirectURLs: {
     signIn: `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success`,
   },
-  // advanced: {
-  //   useSecureCookies: false,
-  //   cookies: {
-  //     state: {
-  //       attributes: {
-  //         sameSite: "none",
-  //         secure: true,
-  //         httpOnly: true,
-  //         path: "/",
-  //       },
-  //     },
-  //     sessionToken: {
-  //       attributes: {
-  //         sameSite: "none",
-  //         secure: true,
-  //         httpOnly: true,
-  //         path: "/",
-  //       },
-  //     },
-  //   },
-  // },
 });

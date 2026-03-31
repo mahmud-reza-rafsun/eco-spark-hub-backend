@@ -157,18 +157,59 @@ const logoutUser = catchAsync(
     }
 )
 
+// const verifyEmail = catchAsync(
+//     async (req: Request, res: Response) => {
+//         const { email, otp } = req.body;
+//         await authService.verifyEmail(email, otp);
+
+//         sendResponse(res, {
+//             status: status.OK,
+//             success: true,
+//             message: "Email verified successfully",
+//         });
+//     }
+// )
+
 const verifyEmail = catchAsync(
     async (req: Request, res: Response) => {
         const { email, otp } = req.body;
+
         await authService.verifyEmail(email, otp);
 
         sendResponse(res, {
             status: status.OK,
             success: true,
-            message: "Email verified successfully",
+            message: "Email verified successfully using static OTP",
         });
     }
 )
+
+// const forgetPassword = catchAsync(
+//     async (req: Request, res: Response) => {
+//         const { email } = req.body;
+//         await authService.forgetPassword(email);
+
+//         sendResponse(res, {
+//             status: status.OK,
+//             success: true,
+//             message: "Password reset OTP sent to email successfully",
+//         });
+//     }
+// )
+
+// const resetPassword = catchAsync(
+//     async (req: Request, res: Response) => {
+//         const { email, otp, password } = req.body;
+//         await authService.resetPassword(email, otp, password);
+
+//         sendResponse(res, {
+//             status: status.OK,
+//             success: true,
+//             message: "Password reset successfully",
+//         });
+//     }
+// )
+
 
 const forgetPassword = catchAsync(
     async (req: Request, res: Response) => {
@@ -178,7 +219,7 @@ const forgetPassword = catchAsync(
         sendResponse(res, {
             status: status.OK,
             success: true,
-            message: "Password reset OTP sent to email successfully",
+            message: "Success! Please use the static OTP: 123456",
         });
     }
 )

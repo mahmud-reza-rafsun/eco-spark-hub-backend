@@ -29,7 +29,7 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/templates`));
 
 // middlewares
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(helmet());
 app.use(logger);
 app.use(cors);

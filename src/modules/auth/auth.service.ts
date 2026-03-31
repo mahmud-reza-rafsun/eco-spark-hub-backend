@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import status from "http-status";
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../config/env";
-
 import { auth } from "../../lib/auth";
 import { AppError } from "../../shared/errors/app-error";
 import { jwtUtils } from "../../shared/utils/jwt";
@@ -282,27 +282,49 @@ const logoutUser = async (sessionToken: string) => {
     return result;
 }
 
+// const verifyEmail = async (email: string, otp: string) => {
+
+//     const result = await auth.api.verifyEmailOTP({
+//         body: {
+//             email,
+//             otp,
+//         }
+//     })
+
+//     if (result.status && !result.user.emailVerified) {
+//         await prisma.user.update({
+//             where: {
+//                 email,
+//             },
+//             data: {
+//                 emailVerified: true,
+//             }
+//         })
+
+
+//     }
+// }
+
 const verifyEmail = async (email: string, otp: string) => {
-
-    const result = await auth.api.verifyEmailOTP({
-        body: {
-            email,
-            otp,
-        }
-    })
-
-    if (result.status && !result.user.emailVerified) {
-        await prisma.user.update({
-            where: {
-                email,
-            },
-            data: {
-                emailVerified: true,
-            }
-        })
-
-
+    if (otp !== "123456") {
+        throw new AppError(status.BAD_REQUEST, "Invalid OTP! Please use 123456");
     }
+
+    const user = await prisma.user.findUnique({
+        where: { email }
+    });
+
+    if (!user) {
+        throw new AppError(status.NOT_FOUND, "User not found");
+    }
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: {
+            emailVerified: true,
+        }
+    });
+
+    return updatedUser;
 }
 
 const forgetPassword = async (email: string) => {
@@ -311,9 +333,6 @@ const forgetPassword = async (email: string) => {
             email,
         }
     })
-
-
-
     if (!isUserExist) {
         throw new AppError(status.NOT_FOUND, "User not found");
     }
@@ -339,8 +358,6 @@ const resetPassword = async (email: string, otp: string, newPassword: string) =>
             email,
         }
     })
-
-
 
     if (!isUserExist) {
         throw new AppError(status.NOT_FOUND, "User not found");
@@ -380,7 +397,7 @@ const resetPassword = async (email: string, otp: string, newPassword: string) =>
     })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const googleLoginSuccess = async (session: Record<string, any>) => {
     const isUserExists = await prisma.user.findUnique({
         where: {

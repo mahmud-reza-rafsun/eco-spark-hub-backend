@@ -1,6 +1,6 @@
 import { Server } from "http";
-import { app } from "./app";
 import { envVars } from "./config/env";
+import { app } from "./app";
 
 let server: Server | null = null;
 
