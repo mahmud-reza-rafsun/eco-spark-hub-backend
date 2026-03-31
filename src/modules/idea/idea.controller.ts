@@ -98,20 +98,6 @@ const getMyIdeas = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const deleteIdea = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const user = req.user;
-
-    const result = await IdeaService.deleteIdea(id as string, user.id);
-
-    sendResponse(res, {
-        status: status.OK,
-        success: true,
-        message: "Idea deleted successfully",
-        data: result,
-    });
-});
-
 const getPendingIdeas = catchAsync(async (req: Request, res: Response) => {
     const result = await IdeaService.getPendingIdeas();
 
@@ -132,6 +118,5 @@ export const IdeaController = {
     updateIdea,
     approveAndRejectIdea,
     getMyIdeas,
-    deleteIdea,
     getPendingIdeas
 }

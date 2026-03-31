@@ -159,8 +159,36 @@ const getMemberStat = async (memberId: string) => {
     };
 };
 
+export const deleteMyPendingIdea = async (ideaId: string, userId: string) => {
+    const idea = await prisma.idea.findUnique({
+        where: {
+            id: ideaId,
+        },
+    });
+
+    if (!idea) {
+        throw new Error('Idea not found!');
+    }
+
+    if (idea.authorId !== userId) {
+        throw new Error('You are not authorized to delete this idea!');
+    }
+
+    if (idea.status !== IdeaStatus.PENDING) {
+        throw new Error('You can only delete ideas that are still pending!');
+    }
+    const deletedIdea = await prisma.idea.delete({
+        where: {
+            id: ideaId,
+        },
+    });
+
+    return deletedIdea;
+};
+
 export const MemberService = {
     getMyPendingIdeas,
     getMyPurchaseIdea,
-    getMemberStat
+    getMemberStat,
+    deleteMyPendingIdea
 };

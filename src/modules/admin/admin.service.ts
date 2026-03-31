@@ -1,4 +1,4 @@
-import { Role, UserStatus } from "@prisma/client";
+import { IdeaStatus, Role, UserStatus } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const getAllUsersFromDB = async () => {
@@ -28,7 +28,7 @@ const getAllUsersFromDB = async () => {
     };
 };
 
-const getTotalRevenueWithPurchasesFromDB = async () => {
+const transactionActivity = async () => {
     const purchases = await prisma.purchase.findMany({
         include: {
             user: {
@@ -191,10 +191,34 @@ const getAdminStat = async (adminId: string) => {
     };
 };
 
+export const deleteIdea = async (ideaId: string) => {
+    const idea = await prisma.idea.findUnique({
+        where: {
+            id: ideaId,
+        },
+    });
+
+    if (!idea) {
+        throw new Error('Idea not found!');
+    }
+
+    if (idea.status !== IdeaStatus.APPROVED) {
+        throw new Error('You can only delete ideas that are still pending!');
+    }
+    const deletedIdea = await prisma.idea.delete({
+        where: {
+            id: ideaId,
+        },
+    });
+
+    return deletedIdea;
+};
+
 export const AdminServices = {
     getAllUsersFromDB,
-    getTotalRevenueWithPurchasesFromDB,
+    transactionActivity,
     toggleUserBlockStatus,
     deleteUser,
-    getAdminStat
+    getAdminStat,
+    deleteIdea
 };

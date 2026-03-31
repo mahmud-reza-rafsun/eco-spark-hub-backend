@@ -344,25 +344,7 @@ const getMyIdea = async (id: string, userId: string) => {
     return result;
 };
 
-const deleteIdea = async (id: string, userId: string) => {
-    const existingIdea = await prisma.idea.findUnique({
-        where: { id: id }
-    });
 
-    if (!existingIdea) {
-        throw new AppError(status.NOT_FOUND, "Idea not found!");
-    }
-    if (existingIdea.status !== IdeaStatus.PENDING) {
-        throw new AppError(status.BAD_REQUEST, "Only pending ideas can be deleted!");
-    }
-    if (existingIdea.authorId !== userId) {
-        throw new AppError(status.FORBIDDEN, "You are not authorized to delete this idea!");
-    }
-    return await prisma.idea.update({
-        where: { id: id },
-        data: { isDeleted: true }
-    });
-};
 
 const getPendingIdeas = async () => {
     const result = await prisma.idea.findMany({
@@ -408,6 +390,5 @@ export const IdeaService = {
     updateIdea,
     approveOrRejectIdea,
     getMyIdea,
-    deleteIdea,
     getPendingIdeas
 };

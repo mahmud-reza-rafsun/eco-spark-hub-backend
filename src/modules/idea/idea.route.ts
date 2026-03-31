@@ -11,6 +11,5 @@ route.get("/get-my-idea", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.get
 route.get("/get-single-idea/:id", IdeaController.getIdeaById);
 route.patch("/:id", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.updateIdea);
 route.patch("/approve-idea/:id", checkAuth(Role.ADMIN), IdeaController.approveAndRejectIdea);
-route.delete("/delete-idea/:id", checkAuth(Role.ADMIN, Role.MEMBER), IdeaController.deleteIdea);
 
 export const IdeaRoute = route;

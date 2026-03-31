@@ -1,5 +1,8 @@
+import { Request, Response } from "express";
 import { catchAsync } from "../../shared/utils/catch-async";
+import { sendResponse } from "../../shared/utils/send-response";
 import { AdminServices } from "./admin.service";
+import status from "http-status";
 
 const getAllUsers = catchAsync(async (req, res) => {
     const result = await AdminServices.getAllUsersFromDB();
@@ -15,8 +18,8 @@ const getAllUsers = catchAsync(async (req, res) => {
     });
 });
 
-const getTotalRevenue = catchAsync(async (req, res) => {
-    const result = await AdminServices.getTotalRevenueWithPurchasesFromDB();
+const transactionActivity = catchAsync(async (req, res) => {
+    const result = await AdminServices.transactionActivity();
 
     res.status(200).json({
         success: true,
@@ -52,21 +55,39 @@ const deleteUser = catchAsync(async (req, res) => {
     });
 });
 
-const getAdminStat = catchAsync(async (req, res) => {
-    const admin = req.user;
-    const result = await AdminServices.getAdminStat(admin.id);
-    res.status(200).json({
-        success: true,
-        statusCode: 200,
-        message: "Admin stat retrieved successfully",
-        data: result,
-    });
-});
+const getAdminStat = catchAsync(
+    async (req: Request, res: Response) => {
+        const admin = req.user;
+        const result = await AdminServices.getAdminStat(admin.id);
+        res.status(200).json({
+            success: true,
+            statusCode: 200,
+            message: "Admin stat retrieved successfully",
+            data: result,
+        });
+    }
+);
+
+const deleteIdea = catchAsync(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        const result = await AdminServices.deleteIdea(id as string);
+
+        sendResponse(res, {
+            status: status.OK,
+            success: true,
+            message: "Idea deleted successfully",
+            data: result,
+        });
+    }
+)
 
 export const AdminControllers = {
-    getTotalRevenue,
+    transactionActivity,
     getAllUsers,
     toggleUserBlockStatus,
     deleteUser,
-    getAdminStat
+    getAdminStat,
+    deleteIdea
 };
