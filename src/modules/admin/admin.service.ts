@@ -202,8 +202,8 @@ export const deleteIdea = async (ideaId: string) => {
         throw new Error('Idea not found!');
     }
 
-    if (idea.status !== IdeaStatus.APPROVED) {
-        throw new Error('You can only delete ideas that are still pending!');
+    if (idea.status === IdeaStatus.APPROVED) {
+        throw new Error('You can only delete ideas already APPROVED');
     }
     const deletedIdea = await prisma.idea.delete({
         where: {

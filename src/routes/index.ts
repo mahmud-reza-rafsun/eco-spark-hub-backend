@@ -7,6 +7,7 @@ import { CommentRoute } from "../modules/comments/comments.route";
 import { PaymentRoutes } from "../modules/purchase/purchase.route";
 import { AdminRoutes } from "../modules/admin/admin.route";
 import { MemberRoutes } from "../modules/member/member.route";
+import { trendingRoute } from "../modules/trendingIdeas/trending.route";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use("/comment", CommentRoute)
 router.use("/payment", PaymentRoutes)
 router.use("/admin", AdminRoutes)
 router.use("/member", MemberRoutes)
+router.use("/trending", trendingRoute)
 
 export const apiRoutes = router;
