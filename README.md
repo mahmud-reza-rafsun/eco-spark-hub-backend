@@ -1,35 +1,32 @@
-# Express Template
+# Eco Spark Hub
 
 Production-ready Express (TypeScript) starter for building REST APIs and backend services.
 
 ## Requirements
 
 - Node.js 18+ (LTS recommended)
-- pnpm or npm
+- bun or pnpm
 
 ## Quick Start
 
 Install dependencies and start the development server:
 
 ```bash
-# using pnpm (recommended)
+# using bun (recommended)
+bun install
+bun dev
+
+# or using pnpm
 pnpm install
 pnpm dev
-
-# or using npm
-npm install
-npm run dev
 ```
 
 ## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build TypeScript
-- `npm start` - Start production server
+- `bun run dev` - Start development server
+- `bun run build` - Build TypeScript
+- `bun start` - Start production server
 
 ## Environment
 
 Use a `.env` file or environment variables for configuration. See `.env.example` for available keys.
-
-## Recommended Folder & File Structure
-
