@@ -14,10 +14,12 @@ model User {
     sessions           Session[]
     accounts           Account[]
 
-    comments  Comment[]
-    ideas     Idea[]
-    purchases Purchase[]
-    votes     Vote[]
+    comments      Comment[]
+    ideas         Idea[]
+    purchases     Purchase[]
+    votes         Vote[]
+    notifications Notification[]
+    insights      Insight[]
 
     @@unique([email])
     @@map("user")

@@ -3,10 +3,10 @@ import Stripe from "stripe";
 import { PaymentStatus } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../config/stripe.config";
-import { generateInvoice } from "./generateInvoice";
+import { envVars } from "../../config/env";
 import { uploadFileToCloudinary } from "../../config/cloudinary.config";
 import { sendEmail } from "../../shared/utils/email";
-import { envVars } from "../../config/env";
+import { generateInvoice } from "./generateInvoice";
 
 const createCheckoutSession = async (ideaId: string, user: any) => {
     const idea = await prisma.idea.findUnique({ where: { id: ideaId } });

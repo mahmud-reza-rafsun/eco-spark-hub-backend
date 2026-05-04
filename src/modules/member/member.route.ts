@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "@prisma/client";
-import { MemberController } from "./member.controller";
+import { checkAuth } from "../../middlewares/checkAuth.js";
+import { MemberController } from "./member.controller.js";
 
 const route = Router();
 

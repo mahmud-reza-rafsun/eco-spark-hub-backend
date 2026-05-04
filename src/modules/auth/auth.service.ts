@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import status from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import { envVars } from "../../config/env";
+import { IChangePasswordPayload, ILoginUserPayload, IRegisterUserPayload, IRequestUser } from "./auth.interface";
 import { auth } from "../../lib/auth";
 import { AppError } from "../../shared/errors/app-error";
-import { jwtUtils } from "../../shared/utils/jwt";
-import { tokenUtils } from "../../shared/utils/token";
-import {
-    IChangePasswordPayload,
-    ILoginUserPayload,
-    IRegisterUserPayload,
-    IRequestUser,
-} from "./auth.interface";
 import { prisma } from "../../lib/prisma";
+import { tokenUtils } from "../../shared/utils/token";
+import { jwtUtils } from "../../shared/utils/jwt";
+import { envVars } from "../../config/env";
+import { JwtPayload } from "jsonwebtoken";
+
 
 const registerUser = async (payload: IRegisterUserPayload) => {
     const { name, email, password } = payload;

@@ -2,7 +2,7 @@
 import status from "http-status";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../shared/errors/app-error";
-import { ICreateCategoryPayload, IUpdateCategoryPayload } from "./category.interface";
+import { ICreateCategoryPayload, IUpdateCategoryPayload } from "../../interface/category.interface";
 import { IRequestUser } from "../auth/auth.interface";
 
 const createCategory = async (user: IRequestUser, payload: ICreateCategoryPayload,) => {

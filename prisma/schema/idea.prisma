@@ -23,7 +23,8 @@ model Idea {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
-  votes       Vote[]
-  comments    Comment[]
-  purchasedBy Purchase[]
+  votes         Vote[]
+  comments      Comment[]
+  purchasedBy   Purchase[]
+  notifications Notification[]
 }
