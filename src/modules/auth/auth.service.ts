@@ -11,7 +11,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 
 const registerUser = async (payload: IRegisterUserPayload) => {
-    const { name, email, password } = payload;
+    const { name, email, password, image } = payload;
 
     if (email) {
         const existingUser = await prisma.user.findUnique({
@@ -30,6 +30,7 @@ const registerUser = async (payload: IRegisterUserPayload) => {
             name,
             email,
             password,
+            image
         },
     });
 
@@ -43,6 +44,7 @@ const registerUser = async (payload: IRegisterUserPayload) => {
             role: data.user.role,
             name: data.user.name,
             email: data.user.email,
+            image: data.user.image,
             status: data.user.status,
             isDeleted: data.user.isDeleted,
             emailVerified: data.user.emailVerified,
@@ -53,6 +55,7 @@ const registerUser = async (payload: IRegisterUserPayload) => {
             role: data.user.role,
             name: data.user.name,
             email: data.user.email,
+            image: data.user.image,
             status: data.user.status,
             isDeleted: data.user.isDeleted,
             emailVerified: data.user.emailVerified,
