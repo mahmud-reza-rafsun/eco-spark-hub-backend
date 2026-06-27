@@ -1,4 +1,4 @@
-# 🌿 Eco Spark Hub — Backend API
+# 🌿 BHAC Org — Backend API
 
 > RESTful API powering the Eco Spark Hub platform — handling authentication, idea management, and purchase transactions for a community-driven green innovation marketplace.
 
