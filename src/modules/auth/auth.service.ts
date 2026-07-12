@@ -433,9 +433,6 @@ const googleLoginSuccess = async (session: Record<string, any>) => {
             },
         });
     }
-
-
-
     const accessToken = tokenUtils.getAccessToken({
         userId: session.user.id,
         role: session.user.role,

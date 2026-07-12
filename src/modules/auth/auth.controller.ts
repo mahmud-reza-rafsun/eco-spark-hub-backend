@@ -282,6 +282,7 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
         return res.redirect(`${envVars.FRONTEND_URL}/login?error=no_session_found`);
     }
 
+
     if (session && !session.user) {
         return res.redirect(`${envVars.FRONTEND_URL}/login?error=no_user_found`);
     }
@@ -292,11 +293,13 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
 
     tokenUtils.setAccessTokenCookie(res, accessToken);
     tokenUtils.setRefreshTokenCookie(res, refreshToken);
+    // ?redirect=//profile -> /profile
     const isValidRedirectPath = redirectPath.startsWith("/") && !redirectPath.startsWith("//");
     const finalRedirectPath = isValidRedirectPath ? redirectPath : "/dashboard";
 
     res.redirect(`${envVars.FRONTEND_URL}${finalRedirectPath}`);
 })
+
 
 const handleOAuthError = catchAsync((req: Request, res: Response) => {
     const error = req.query.error as string || "oauth_failed";

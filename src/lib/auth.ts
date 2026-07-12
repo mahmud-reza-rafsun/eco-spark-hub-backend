@@ -19,6 +19,7 @@ export const auth = betterAuth({
     envVars.BETTER_AUTH_URL!,
     "http://localhost:3000",
   ],
+
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -59,10 +60,15 @@ export const auth = betterAuth({
     google: {
       clientId: envVars.GOOGLE_CLIENT_ID as string,
       clientSecret: envVars.GOOGLE_CLIENT_SECRET as string,
-      accessType: "offline",
-      prompt: "select_account consent",
-      mapProfileToUser: () => {
+      additionalAuthorizationParameters: {
+        access_type: "offline",
+        prompt: "select_account consent",
+      },
+      mapProfileToUser: async (profile) => {
         return {
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
           role: Role.MEMBER,
           status: UserStatus.ACTIVE,
           needPasswordChange: false,
@@ -73,11 +79,7 @@ export const auth = betterAuth({
       },
     },
   },
-  emailVerification: {
-    sendOnSignUp: true,
-    sendOnSignIn: true,
-    autoSignInAfterVerification: true,
-  },
+
   user: {
     additionalFields: {
       role: {
@@ -103,10 +105,10 @@ export const auth = betterAuth({
       deletedAt: {
         type: "date",
         required: false,
-        defaultValue: null,
       },
     },
   },
+
   plugins: [
     bearer(),
     emailOTP({
@@ -114,14 +116,12 @@ export const auth = betterAuth({
       async sendVerificationOTP({ email, otp, type }) {
         if (type === "email-verification") {
           const user = await prisma.user.findUnique({
-            where: {
-              email,
-            },
+            where: { email },
           });
 
           if (!user) {
             console.error(
-              `User with email ${email} not found. Cannot send verification OTP.`,
+              `User with email ${email} not found. Cannot send verification OTP.`
             );
             return;
           }
@@ -140,12 +140,8 @@ export const auth = betterAuth({
           }
         } else if (type === "forget-password") {
           const user = await prisma.user.findUnique({
-            where: {
-              email,
-            },
+            where: { email },
           });
-
-
 
           if (user) {
             sendEmail({
@@ -161,12 +157,8 @@ export const auth = betterAuth({
           }
         }
       },
-      expiresIn: 5 * 60, // 5 minutes in seconds
+      expiresIn: 5 * 60,
       otpLength: 6,
     }),
   ],
-
-  redirectURLs: {
-    signIn: `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success`,
-  },
 });

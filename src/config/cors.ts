@@ -11,6 +11,4 @@ const cors = createCors({
   allowedHeaders: ["Content-Type", "Authorization"],
 });
 
-
-
 export { cors };

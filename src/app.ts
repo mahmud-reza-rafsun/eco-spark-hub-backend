@@ -28,11 +28,15 @@ app.set("query parser", (str: string) => qs.parse(str));
 app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/templates`));
 
-
-
 // middlewares
 app.use(express.json({ limit: '10mb' }));
-app.use(helmet());
+// app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
+
 app.use(logger);
 app.use(cors);
 app.use(limiter);
@@ -47,10 +51,10 @@ if (process.env.NODE_ENV === "production") {
 // Home page route
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({
-    title: "Welcome to EcoSpark Hub",
+    title: "Welcome to BHAC",
     description: "A secure, production-ready backend engine built with TypeScript, ensuring high performance and scalable architecture.",
     version: "1.0.0",
-    backendRepository: "https://github.com/mahmud-reza-rafsun/eco-spark-hub-backend",
+    backendRepository: "https://github.com/mahmud-reza-rafsun/bhac-hub-backend",
   });
 });
 
@@ -58,6 +62,7 @@ app.get("/", (_req: Request, res: Response) => {
 app.use("/api/auth", (req, res) => {
   return toNodeHandler(auth)(req, res);
 });
+
 app.use("/api/v1", apiRoutes);
 
 // unhandled routes
